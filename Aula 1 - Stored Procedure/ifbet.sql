@@ -4,6 +4,9 @@ CREATE DATABASE ifbet;
 
 \c ifbet;
 
+-- Instalando a Extensão do plpgsql
+CREATE EXTENSION IF NOT EXISTS plpgsql;
+
 CREATE TABLE usuario (
     id serial primary key,
     nome character varying(200) not null,
