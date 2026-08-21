@@ -1,7 +1,7 @@
 -- Crie uma função possui_saldo(usuario_id, valor) que retorne TRUE ou FALSE.
 CREATE OR REPLACE FUNCTION possui_saldo(var_usuario_id INTEGER, var_valor MONEY) 
 RETURNS BOOLEAN
-LANGUAGE plpgsql        -- <-- LANGUAGE é obrigatório aqui
+LANGUAGE plpgsql        
 AS $$
 DECLARE 
     saldo_atual money := 0::money;
