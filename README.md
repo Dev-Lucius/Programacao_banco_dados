@@ -736,6 +736,6 @@ EXECUTE FUNCTION registrar_auditoria();
 
 ---
 
-> ✍️ **Autor**: [Seu Nome]  
+> ✍️ **Autor**: **Lucas Oliveira**  
 > 🎓 **Disciplina**: Programação em Banco de Dados  
 > 🐘 **SGBD**: PostgreSQL 15+
