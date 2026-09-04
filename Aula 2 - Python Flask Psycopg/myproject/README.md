@@ -1,147 +1,179 @@
 # Introdução ao Flask
 
-## Versão do Python
+## Requisitos
 
-Recomendamos o uso da versão mais recente do Python. O Flask suporta Python 3.9 e mais recente
+Recomenda-se o uso da versão mais recente do Python. O Flask suporta **Python 3.9 ou superior**.
 
-## Dependências
+---
 
-Essas distribuições serão instaladas automaticamente ao instalar o Flask.
+## Dependências do Flask
 
-- **Werkzeug** implementa o WSGI, a interface Python padrão entre aplicações e servidores.
+As seguintes bibliotecas são instaladas automaticamente junto com o Flask:
 
-- **Jinja** é um idioma de modelo que renderiza as páginas do seu aplicativo serve.
+| Biblioteca | Função |
+|---|---|
+| **Werkzeug** | Implementa o WSGI, a interface padrão Python entre aplicações e servidores web. |
+| **Jinja** | Linguagem de templates para renderizar páginas HTML dinamicamente. |
+| **MarkupSafe** | Acompanha o Jinja. Escapa entradas não confiáveis durante a renderização de templates, prevenindo ataques de injeção (XSS). |
+| **ItsDangerous** | Assina dados de forma segura para garantir integridade. Utilizado para proteger cookies de sessão do Flask. |
+| **Click** | Framework para criar interfaces de linha de comando. Fornece o comando `flask` e permite adicionar comandos personalizados. |
+| **Blinker** | Biblioteca opcional que fornece suporte a **Sinais** no Flask. |
 
-- **MarkupSafe** vem com Jinja. Ele escapa da entrada não confiável ao renderizar templates para evitar ataques de injeção.
+---
 
-- Sua perigosa assina com segurança dados para garantir sua integridade. Isto é usado para proteger o cookie de sessão da Flask.
+## Ambientes Virtuais
 
-- **Click** é uma estrutura para escrever aplicativos de linha de comando. Proporciona o flaskcomando e permite adicionar comandos de gerenciamento personalizados.
+Um ambiente virtual gerencia as dependências do seu projeto de forma isolada, tanto em desenvolvimento quanto em produção.
 
-- O **Blinker** fornece suporte para Sinais.
+### Por que usar um ambiente virtual?
 
+- Quanto mais projetos Python você desenvolve, maior a probabilidade de precisar trabalhar com **versões diferentes** de bibliotecas ou até mesmo do próprio Python.
+- Uma versão mais recente de uma biblioteca em um projeto pode **quebrar a compatibilidade** de outro projeto.
+- Ambientes virtuais criam **grupos independentes** de bibliotecas Python, um para cada projeto.
+- Os pacotes instalados em um projeto **não afetam** outros projetos nem os pacotes do sistema operacional.
 
-## Ambientes virtuais
-
-Use um ambiente virtual para gerenciar as dependências do seu projeto, tanto em desenvolvimento e na produção.
-
-> Qual Problema Resolve um Ambiente Virtual?
-
-- Quanto mais Python projetar você têm, o mais provável é que você precisa trabalhar com diferentes versões de Bibliotecas Python, ou mesmo Python em si. 
-
-- Versões mais recentes de bibliotecas para uma projeto pode quebrar compatibilidade em outro projeto
-
-- Ambientes virtuais são grupos independentes de bibliotecas Python, um para cada projeto. 
-
-- Os pacotes instalados para um projeto não afetarão outros projetos ou pacotes do sistema operacional
-
-### Criando um Ambiente
+### Criando um ambiente virtual
 
 ```bash
-$ mkdir myproject
-$ cd myproject
-$ python3 -m venv .venv
+mkdir myproject
+cd myproject
+python3 -m venv .venv
 ```
 
-
-### Ativando o Ambiente
+### Ativando o ambiente virtual
 
 ```bash
-$ . .venv/bin/activate
+# Linux / macOS
+. .venv/bin/activate
+
+# Windows (CMD)
+.venv\Scripts\activate.bat
+
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
 ```
+
+> Após ativar, o prompt do terminal exibirá o nome do ambiente (ex: `(.venv)`).
+
+---
 
 ## Instalando o Flask
 
+Com o ambiente virtual ativado, execute:
+
 ```bash
-$ pip install Flask
+pip install Flask
 ```
 
+---
 
-## Instalando o psycopg
+## Instalando o Psycopg (adaptador PostgreSQL para Python)
 
-> **Psycopg** é um software livre que funciona como um adaptador de banco de dados PostgreSQL mais popular e avançado para a linguagem Python
-
-Se você usa Python e PostgreSQL e gostaria de suportar a manutenção do adaptador mais avançado entre os dois sistemas, por favor considere tornando-se um patrocinador. 
-
-O patrocínio ajuda a garantir a manutenção contínua do Psycopg 2, Psycopg 3 e projetos relacionados. 
+**Psycopg** é o adaptador de banco de dados PostgreSQL mais popular e avançado para Python.
 
 ```bash
 pip install "psycopg[binary]"
 ```
 
-## Executando o Código
+> A opção `[binary]` instala a versão pré-compilada, dispensando a instalação de dependências de compilação no sistema.
+
+---
+
+## Executando a Aplicação
+
+```bash
+flask --app nome_do_arquivo run
+```
+
+**Exemplo:** se seu arquivo principal se chama `hello.py`:
 
 ```bash
 flask --app hello run
 ```
 
-> ``hello`` é o nome do nosso Arquivo 
+> Por padrão, o servidor roda em `http://127.0.0.1:5000`.
 
 ---
 
-# Objetos principais em Psycopg 3
+# Objetos Principais do Psycopg 3
 
-O uso básico do Psycopg é comum a todos os adaptadores de banco de dados que implementam o protocolo DB-API.
-
-Outros adaptadores de banco de dados, como o builtin sqlite3ou psycopg2, têm aproximadamente o mesmo padrão de interaç
+O padrão de uso do Psycopg é semelhante ao de outros adaptadores DB-API, como o `sqlite3` nativo do Python e o `psycopg2`.
 
 ```python
-# Note: the module name is psycopg, not psycopg3
+# Importante: o nome do módulo é psycopg, não psycopg3
 import psycopg
 
-# Connect to an existing database
+# Conecta a um banco de dados existente
 with psycopg.connect("dbname=test user=postgres") as conn:
 
-    # Open a cursor to perform database operations
+    # Abre um cursor para executar operações no banco
     with conn.cursor() as cur:
 
-        # Execute a command: this creates a new table
+        # Executa um comando: cria uma nova tabela
         cur.execute("""
             CREATE TABLE test (
                 id serial PRIMARY KEY,
                 num integer,
-                data text)
-            """)
+                data text
+            )
+        """)
 
-        # Pass data to fill a query placeholders and let Psycopg perform
-        # the correct conversion (no SQL injections!)
+        # Passa dados para preencher placeholders (%s).
+        # O Psycopg converte automaticamente, prevenindo SQL Injection.
         cur.execute(
             "INSERT INTO test (num, data) VALUES (%s, %s)",
-            (100, "abc'def"))
+            (100, "abc'def")
+        )
 
-        # Query the database and obtain data as Python objects.
+        # Consulta o banco e obtém os dados como objetos Python
         cur.execute("SELECT * FROM test")
         print(cur.fetchone())
-        # will print (1, 100, "abc'def")
+        # Saída: (1, 100, "abc'def")
 
-        # You can use `cur.executemany()` to perform an operation in batch
+        # executemany() realiza operações em lote
         cur.executemany(
-            "INSERT INTO test (num) values (%s)",
-            [(33,), (66,), (99,)])
+            "INSERT INTO test (num) VALUES (%s)",
+            [(33,), (66,), (99,)]
+        )
 
-        # You can use `cur.fetchmany()`, `cur.fetchall()` to return a list
-        # of several records, or even iterate on the cursor
-        cur.execute("SELECT id, num FROM test order by num")
+        # fetchmany() e fetchall() retornam listas de registros.
+        # Também é possível iterar diretamente sobre o cursor.
+        cur.execute("SELECT id, num FROM test ORDER BY num")
         for record in cur:
             print(record)
 
-        # Make the changes to the database persistent
+        # Torna as alterações permanentes no banco de dados
         conn.commit()
 ```
 
-> No exemplo, você pode ver alguns dos principais objetos e métodos e como eles Relacionar-se entre si:
+### Relação entre os principais objetos
 
-- A função connect()cria uma nova sessão de banco de dados e retorna um novo Connectioninstância. AsyncConnection.connect()cria uma asyncioconexão em vez disso.
+| Objeto / Método | Descrição |
+|---|---|
+| `psycopg.connect()` | Cria uma nova sessão com o banco de dados e retorna uma instância de `Connection`. Para conexões assíncronas, use `AsyncConnection.connect()`. |
+| `Connection` | Encapsula uma sessão de banco de dados. Permite criar cursores com `cursor()`, confirmar transações com `commit()` e desfazê-las com `rollback()`. |
+| `Cursor` | Permite interagir com o banco de dados: enviar comandos via `execute()` e `executemany()`, e recuperar dados com `fetchone()`, `fetchmany()`, `fetchall()` ou iterando diretamente sobre o cursor. |
 
-- O Connectionclasse encapsula uma sessão de banco de dados. Permite:
+> **Uso de `with` (context manager):** utilizar `with` garante que conexões e cursores sejam **fechados automaticamente** e seus recursos liberados ao final do bloco. Esse comportamento é uma diferença importante em relação ao `psycopg2`.
 
-    * criar novos Cursorinstâncias usando o cursor()método para executar comandos e consultas de banco de dados, encerrar transações usando os métodos commit()ou rollback().
+---
 
-    * A classe Cursorpermite a interação com o banco de dados:
+## Resumo dos Métodos do Cursor
 
-    * enviar comandos para o banco de dados usando métodos como execute()e executemany(),
+| Método | Função |
+|---|---|
+| `execute(sql, params)` | Executa um único comando SQL com parâmetros opcionais. |
+| `executemany(sql, params_list)` | Executa o mesmo comando SQL várias vezes com diferentes parâmetros (operação em lote). |
+| `fetchone()` | Retorna a próxima linha do resultado como uma tupla, ou `None` se não houver mais linhas. |
+| `fetchmany(size=n)` | Retorna uma lista com até `n` linhas do resultado. |
+| `fetchall()` | Retorna uma lista com **todas** as linhas restantes do resultado. |
+| `for record in cur` | Itera sobre todas as linhas do resultado de forma eficiente. |
 
-    * recuperar dados do banco de dados, iterando no cursor ou usando métodos como tais fetchone(), fetchmany(), fetchall().
+---
 
-    > **Usando esses objetos como gerenciadores de contexto (ou seja, usando with) vai certificar-se para fechá-los e liberar seus recursos no final do bloco (observe que isso é diferente do psycopg2).**
+## Dicas Importantes
 
+- **Sempre use placeholders (`%s`)** ao passar valores para consultas. O Psycopg trata a conversão e prevenção de SQL Injection automaticamente.
+- **Utilize `with`** para gerenciar conexões e cursores. Isso evita vazamento de recursos.
+- **Chame `conn.commit()`** para confirmar transações de escrita (`INSERT`, `UPDATE`, `DELETE`). Sem isso, as alterações serão perdidas ao fechar a conexão.
+- Em caso de erro durante uma transação, use `conn.rollback()` para desfazer as alterações pendentes.
