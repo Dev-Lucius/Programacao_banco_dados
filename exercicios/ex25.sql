@@ -18,8 +18,6 @@ BEGIN
     INSERT INTO jogo (equipe_casa_id, equipe_visitante_id, data_hora)
     VALUES (p_casa, p_visitante, p_data);
 
-    COMMIT;
-
     RAISE NOTICE 'Jogo criado: Casa % x Visitante % em %', p_casa, p_visitante, p_data;
 END;
 $$;
