@@ -733,6 +733,7 @@ EXECUTE FUNCTION registrar_auditoria();
 - [Documentação Oficial do PostgreSQL — PL/pgSQL](https://www.postgresql.org/docs/current/plpgsql.html)
 - [PostgreSQL Tutorial — PL/pgSQL](https://www.postgresqltutorial.com/postgresql-plpgsql/)
 - [PostgreSQL Wiki — Triggers](https://wiki.postgresql.org/wiki/A_Guide_to_C%2B%2B_Triggers)
+- [Resumo dos Conteúdos](https://app.notion.com/p/3057c6764d48808ea350ee2b292cdbc9?v=3057c6764d488152852c000c8342eaf8&source=copy_link)
 
 ---
 
