@@ -1,22 +1,37 @@
-CREATE OR REPLACE FUNCTION desafio_um()
+CREATE OR REPLACE FUNCTION historico_apostas(var_usuario_id_aux INTEGER)
 RETURNS TABLE(
-    var_nome TEXT,
-    var_id_equipe_casa INTEGER,
-    var_id_equipe_visitante INTEGER,
-    var_data_hora_jogo TIMESTAMP
+    var_aposta_id INTEGER,
+    var_usuario_id INTEGER,
+    var_jogo_id INTEGER,
+    var_jogo MONEY,
+    var_times TEXT,
+    var_gols_da_casa INTEGER,
+    var_gols_do_visitante INTEGER
 )
 LANGUAGE plpgsql
 AS $$
-BEGIN
+BEGIN 
     RETURN QUERY
     SELECT
-        e.nome,
-        j.equipe_casa_id,
-        j.equipe_visitante_id,
-        j.data_hora
-    FROM jogo j
-    left join equipe e
-    on e.id = j.equipe_casa_id AND e.id = j.equipe_visitante_id
-    where j.equipe_casa_id is not null and j.equipe_visitante_id IS not null;
+        aposta.id,
+        usuario_id,
+        jogo.id,
+        valor,
+        (SELECT nome FROM equipe WHERE id = jogo.equipe_casa_id) || ' x ' || (SELECT nome FROM equipe WHERE id = jogo.equipe_visitante_id) AS times,
+        aposta.gols_da_casa,
+        aposta.gols_do_visitante
+    FROM aposta
+    LEFT JOIN jogo  
+        ON aposta.jogo_id = jogo.id
+    LEFT JOIN equipe    
+        ON equipe.id = jogo.equipe_casa_id OR equipe.id = jogo.equipe_visitante_id
+    WHERE aposta.usuario_id = var_usuario_id_aux
+    GROUP BY
+        aposta.id,
+        aposta.usuario_id,
+        jogo.id,
+        valor,
+        aposta.gols_da_casa,
+        aposta.gols_do_visitante;
 END;
 $$;
