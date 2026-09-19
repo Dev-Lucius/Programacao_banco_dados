@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Erro - IFBet
+{% endblock %}
+
+
+{% block content %}
+
+<section class="error-page">
+
+    <div class="card error-card">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <span class="eyebrow">
+            IFBet
+        </span>
+
+        <h1>
+            Ocorreu um erro
+        </h1>
+
+        <p>
+            {{ mensagem }}
+        </p>
+
+        <div class="error-actions">
+
+            <a
+                href="{{ url_for('dashboard.inicio') }}"
+                class="button button-primary"
+            >
+                Voltar para o início
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

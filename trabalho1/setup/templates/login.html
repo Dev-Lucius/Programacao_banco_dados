@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Entrar - IFBet
+{% endblock %}
+
+
+{% block content %}
+
+<section class="login-page">
+
+    <div class="card login-card">
+
+        <div class="card-header">
+
+            <span class="eyebrow">
+                Plataforma de apostas
+            </span>
+
+            <h1>
+                Bem-vindo ao IFBet
+            </h1>
+
+            <p>
+                Selecione um usuário para acessar a plataforma.
+            </p>
+
+        </div>
+
+
+        {% if usuarios %}
+
+            <div class="user-list">
+
+                {% for usuario in usuarios %}
+
+                    <a
+                        href="{{ url_for(
+                            'dashboard.dashboard',
+                            usuario_id=usuario.id
+                        ) }}"
+                        class="user-option"
+                    >
+
+                        <div class="user-avatar">
+                            {{ usuario.nome[0] | upper }}
+                        </div>
+
+                        <div class="user-info">
+
+                            <strong>
+                                {{ usuario.nome }}
+                            </strong>
+
+                            <span>
+                                Usuário #{{ usuario.id }}
+                            </span>
+
+                        </div>
+
+                        <span class="user-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h2>
+                    Nenhum usuário encontrado
+                </h2>
+
+                <p>
+                    Cadastre um usuário no banco de dados
+                    para acessar o IFBet.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
