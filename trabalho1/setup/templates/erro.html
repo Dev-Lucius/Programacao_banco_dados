@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Algo deu errado - IFBet{% endblock %}
+
+{% block content %}
+<section class="erro">
+    <div class="erro__cartao" aria-hidden="true"></div>
+
+    <div>
+        <h1 class="titulo-grande">Algo deu errado</h1>
+        <p>{{ mensagem }}</p>
+        <a class="botao botao--amarelo" href="{{ url_for('dashboard.inicio') }}">Voltar ao início</a>
+    </div>
+</section>
+{% endblock %}

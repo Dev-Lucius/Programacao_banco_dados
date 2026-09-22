@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10261a">
+
+    <title>{% block title %}IFBet{% endblock %}</title>
+
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="{{ url_for('static', filename='fonts/big-shoulders-display-latin-wght-normal.woff2') }}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="{{ url_for('static', filename='fonts/schibsted-grotesk-latin-wght-normal.woff2') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+    <header class="topo">
+        <div class="topo__miolo">
+
+            <a class="marca" href="{{ url_for('dashboard.inicio') }}" aria-label="IFBet, página inicial">
+                <svg class="marca__logo" viewBox="0 0 32 32" aria-hidden="true">
+                    <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                    <path d="M16 3v26" stroke="currentColor" stroke-width="2.5"/>
+                    <circle cx="16" cy="16" r="3" fill="currentColor"/>
+                </svg>
+                <span class="marca__nome">IF<b>Bet</b></span>
+            </a>
+
+            {% if usuario is defined and usuario %}
+                {% set pagina = request.endpoint %}
+
+                <nav class="menu" aria-label="Principal">
+                    <a href="{{ url_for('dashboard.dashboard', usuario_id=usuario.id) }}"
+                       {% if pagina == 'dashboard.dashboard' %}aria-current="page"{% endif %}>Jogos</a>
+                    <a href="{{ url_for('bilhetes.meus_bilhetes', usuario_id=usuario.id) }}"
+                       {% if pagina == 'bilhetes.meus_bilhetes' %}aria-current="page"{% endif %}>Meus bilhetes</a>
+                </nav>
+
+                <div class="quem">
+                    <span class="camisa" aria-hidden="true">{{ usuario.id }}</span>
+                    <span class="quem__nome">{{ usuario.nome }}</span>
+                    <a class="quem__trocar" href="{{ url_for('dashboard.inicio') }}">Trocar</a>
+                </div>
+            {% endif %}
+
+        </div>
+    </header>
+
+    <main id="conteudo" class="principal">
+        <div class="miolo">
+
+            {# Mensagens flash. Se o texto tiver várias linhas (erros do PostgreSQL), a 1ª linha
+               vira o título e o resto fica em "Detalhes técnicos". #}
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
+                {% if mensagens %}
+                <div class="avisos" role="status" aria-live="polite">
+                    {% for categoria, mensagem in mensagens %}
+                        {% set linhas = mensagem.split('\n') %}
+                        <div class="aviso aviso--{{ categoria }}">
+                            <div>
+                                <p class="aviso__titulo">
+                                    {% if categoria == 'erro' %}<span class="so-leitor">Erro: </span>{% endif %}
+                                    {{ linhas[0] }}
+                                </p>
+                                {% if linhas | length > 1 %}
+                                <details class="aviso__detalhes">
+                                    <summary>Detalhes técnicos</summary>
+                                    <pre>{{ linhas[1:] | join('\n') | trim }}</pre>
+                                </details>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <p>Projeto acadêmico de Programação em Banco de Dados. Os valores são fictícios.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

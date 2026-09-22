@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Escolher usuário - IFBet{% endblock %}
+
+{% block content %}
+<section class="escolha">
+
+    <div class="faixa-campo">
+        <h1 class="titulo-grande">Escolha o usuário</h1>
+        <p>Selecione quem vai apostar para ver o saldo, os jogos e os bilhetes.</p>
+    </div>
+
+    {% if usuarios %}
+        <ul class="escalacao">
+            {% for u in usuarios %}
+            <li>
+                <a class="jogador" href="{{ url_for('dashboard.dashboard', usuario_id=u.id) }}">
+                    <span class="camisa" aria-hidden="true">{{ u.id }}</span>
+                    <span class="jogador__nome">{{ u.nome }}</span>
+                    <span class="jogador__acao">Entrar</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="vazio">
+            <h2>Nenhum usuário cadastrado</h2>
+            <p>Insira ao menos um registro na tabela <code>usuario</code> para poder entrar.</p>
+        </div>
+    {% endif %}
+
+</section>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "_macros.html" import data_jogo, odd, contagem, dinheiro %}
+
+{% block title %}Meus bilhetes - IFBet{% endblock %}
+
+{% block content %}
+
+{# Mais recentes primeiro (a função do banco não garante ordem). #}
+{% set lista = bilhetes | sort(attribute='var_aposta_id', reverse=true) %}
+
+<header class="pagina-cab">
+    <div>
+        <h1 class="titulo-grande">Meus bilhetes</h1>
+        <p>
+            {% if lista %}
+                {{ contagem(lista | length, 'aposta registrada', 'apostas registradas') }}.
+            {% else %}
+                Suas apostas aparecem aqui.
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="pagina-cab__saldo">
+        <span>Saldo disponível</span>
+        <strong>{{ usuario.saldo | brl }}</strong>
+    </div>
+</header>
+
+{% if lista %}
+<ul class="bilhetes">
+    {% for bilhete in lista %}
+    <li class="bilhete-sombra">
+        <article class="bilhete">
+
+            <header class="bilhete__topo">
+                <span>Bilhete #{{ bilhete.var_aposta_id }}</span>
+                <span>Jogo: {{ data_jogo(bilhete.var_jogo_data_hora) }}</span>
+            </header>
+
+            <h2 class="bilhete__jogo">
+                {{ bilhete.var_equipe_casa_nome }}
+                <span>contra</span>
+                {{ bilhete.var_equipe_visitante_nome }}
+            </h2>
+
+            <p class="bilhete__palpite">
+                <span>Palpite</span>
+                <strong>{{ bilhete.var_aposta_gols_casa }} &times; {{ bilhete.var_aposta_gols_visitante }}</strong>
+            </p>
+
+            <dl class="bilhete__linhas">
+                <div>
+                    <dt>Valor apostado</dt>
+                    <dd>{{ dinheiro(bilhete.var_aposta_valor) }}</dd>
+                </div>
+                <div>
+                    <dt>Odd</dt>
+                    <dd>{{ odd(bilhete.var_aposta_odd) }}</dd>
+                </div>
+                <div class="linha--retorno">
+                    <dt>Retorno potencial</dt>
+                    <dd>{{ dinheiro(bilhete.var_lucro_esperado) }}</dd>
+                </div>
+            </dl>
+
+        </article>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<div class="vazio">
+    <h2>Nenhuma aposta ainda</h2>
+    <p>Escolha um jogo aberto, palpite o placar e faça sua primeira aposta. O bilhete aparece aqui.</p>
+    <a class="botao botao--amarelo" href="{{ url_for('dashboard.dashboard', usuario_id=usuario.id) }}">Ver jogos abertos</a>
+</div>
+{% endif %}
+
+{% endblock %}

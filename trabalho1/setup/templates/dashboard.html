@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% from "_macros.html" import data_jogo, contagem, dinheiro %}
+
+{% block title %}Jogos - IFBet{% endblock %}
+
+{% block content %}
+
+{# O banco devolve todos os jogos; quem já tem placar está encerrado. #}
+{% set abertos = jogos | selectattr('var_gols_da_casa', 'none') | list %}
+{% set encerrados = jogos | rejectattr('var_gols_da_casa', 'none') | list %}
+
+<div class="painel">
+
+    <!-- Barra lateral: saldo e estatísticas do sistema -->
+    <aside class="conta" aria-label="Sua conta">
+        <div class="conta__saldo-bloco">
+            <p class="conta__saldo-rotulo">Saldo disponível</p>
+            <p class="conta__saldo">{{ usuario.saldo | brl }}</p>
+        </div>
+
+        <dl class="conta__dados">
+            <div>
+                <dt>Jogos no sistema</dt>
+                <dd>{{ stats.total_jogos or 0 }}</dd>
+            </div>
+            <div>
+                <dt>Média das apostas</dt>
+                <dd>{{ dinheiro(stats.media_apostas) }}</dd>
+            </div>
+        </dl>
+
+        <a class="botao" href="{{ url_for('bilhetes.meus_bilhetes', usuario_id=usuario.id) }}">Ver meus bilhetes</a>
+    </aside>
+
+    <!-- Jogos -->
+    <section class="jogos" aria-labelledby="titulo-jogos">
+
+        <header class="jogos__cab">
+            <h1 id="titulo-jogos" class="titulo-grande">Olá, {{ usuario.nome }}</h1>
+            <p>
+                {% if abertos %}
+                    {{ contagem(abertos | length, 'jogo aberto', 'jogos abertos') }} para aposta.
+                    Palpite o placar, informe o valor e a odd.
+                {% else %}
+                    Nenhum jogo aberto para aposta no momento.
+                {% endif %}
+            </p>
+        </header>
+
+        {% if abertos %}
+        <div class="lista-jogos">
+            {% for jogo in abertos %}
+            <article class="jogo" aria-labelledby="jogo-{{ jogo.var_jogo_id }}">
+
+                <div class="jogo__cab">
+                    <time datetime="{{ jogo.var_data_hora_jogo.isoformat() if jogo.var_data_hora_jogo }}">
+                        {{ data_jogo(jogo.var_data_hora_jogo) | capitalize }}
+                    </time>
+                    <span>Jogo {{ jogo.var_jogo_id }}</span>
+                </div>
+
+                <h2 id="jogo-{{ jogo.var_jogo_id }}" class="so-leitor">
+                    {{ jogo.var_equipe_casa }} contra {{ jogo.var_equipe_visitante }}
+                </h2>
+
+                <form class="palpite" method="post" action="{{ url_for('apostas.apostar') }}">
+                    <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                    <input type="hidden" name="jogo_id" value="{{ jogo.var_jogo_id }}">
+
+                    <!-- O campo: cada metade tem o time e o placar do palpite -->
+                    <div class="campo" role="group" aria-label="Palpite do placar" style="--i: {{ loop.index0 }}">
+                        <div class="campo__giz" aria-hidden="true"><span class="campo__centro"></span></div>
+
+                        <div class="lado lado--casa">
+                            <p class="lado__time">{{ jogo.var_equipe_casa }}</p>
+                            <div class="placar">
+                                <button type="button" class="placar__passo" data-passo="-1" hidden
+                                        aria-label="Menos um gol para {{ jogo.var_equipe_casa }}">&minus;</button>
+                                <label class="so-leitor" for="casa-{{ jogo.var_jogo_id }}">Gols de {{ jogo.var_equipe_casa }}</label>
+                                <input id="casa-{{ jogo.var_jogo_id }}" type="number" name="gols_da_casa"
+                                       min="0" max="99" value="0" inputmode="numeric" required>
+                                <button type="button" class="placar__passo" data-passo="1" hidden
+                                        aria-label="Mais um gol para {{ jogo.var_equipe_casa }}">+</button>
+                            </div>
+                        </div>
+
+                        <div class="lado lado--visitante">
+                            <p class="lado__time">{{ jogo.var_equipe_visitante }}</p>
+                            <div class="placar">
+                                <button type="button" class="placar__passo" data-passo="-1" hidden
+                                        aria-label="Menos um gol para {{ jogo.var_equipe_visitante }}">&minus;</button>
+                                <label class="so-leitor" for="visitante-{{ jogo.var_jogo_id }}">Gols de {{ jogo.var_equipe_visitante }}</label>
+                                <input id="visitante-{{ jogo.var_jogo_id }}" type="number" name="gols_do_visitante"
+                                       min="0" max="99" value="0" inputmode="numeric" required>
+                                <button type="button" class="placar__passo" data-passo="1" hidden
+                                        aria-label="Mais um gol para {{ jogo.var_equipe_visitante }}">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- O cupom: valor, odd e botão -->
+                    <div class="cupom">
+                        <div class="cupom__campo">
+                            <label for="valor-{{ jogo.var_jogo_id }}">Valor da aposta</label>
+                            <div class="cupom__entrada">
+                                <span aria-hidden="true">R$</span>
+                                <input id="valor-{{ jogo.var_jogo_id }}" type="number" name="valor"
+                                       min="0.01" step="0.01" inputmode="decimal" placeholder="10,00" required>
+                            </div>
+                        </div>
+
+                        <div class="cupom__campo">
+                            <label for="odd-{{ jogo.var_jogo_id }}">Odd <span class="cupom__dica" id="odd-dica-{{ jogo.var_jogo_id }}">(de 0,01 a 1,00)</span></label>
+                            <div class="cupom__entrada">
+                                <input id="odd-{{ jogo.var_jogo_id }}" type="number" name="odd"
+                                       min="0.01" max="1" step="0.01" value="0.50" inputmode="decimal"
+                                       aria-describedby="odd-dica-{{ jogo.var_jogo_id }}" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="botao botao--amarelo botao-apostar">Apostar</button>
+                    </div>
+                </form>
+
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="vazio">
+            <h2>Sem jogos abertos</h2>
+            <p>Só aparecem aqui as partidas que ainda não têm placar. Cadastre um novo jogo no banco para apostar.</p>
+        </div>
+        {% endif %}
+
+        {% if encerrados %}
+        <details class="encerrados">
+            <summary>{{ contagem(encerrados | length, 'jogo encerrado', 'jogos encerrados') }}</summary>
+
+            <div class="lista-jogos">
+                {% for jogo in encerrados %}
+                <article class="jogo jogo--encerrado" aria-label="{{ jogo.var_equipe_casa }} {{ jogo.var_gols_da_casa }} a {{ jogo.var_gols_do_visitante }} {{ jogo.var_equipe_visitante }}">
+                    <div class="jogo__cab">
+                        <time datetime="{{ jogo.var_data_hora_jogo.isoformat() if jogo.var_data_hora_jogo }}">
+                            {{ data_jogo(jogo.var_data_hora_jogo) | capitalize }}
+                        </time>
+                        <span class="jogo__etiqueta">Encerrado</span>
+                    </div>
+
+                    <div class="campo">
+                        <div class="campo__giz" aria-hidden="true"><span class="campo__centro"></span></div>
+
+                        <div class="lado lado--casa">
+                            <p class="lado__time">{{ jogo.var_equipe_casa }}</p>
+                            <div class="placar"><span class="placar__final">{{ jogo.var_gols_da_casa }}</span></div>
+                        </div>
+                        <div class="lado lado--visitante">
+                            <p class="lado__time">{{ jogo.var_equipe_visitante }}</p>
+                            <div class="placar"><span class="placar__final">{{ jogo.var_gols_do_visitante }}</span></div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </details>
+        {% endif %}
+
+    </section>
+</div>
+
+{% endblock %}

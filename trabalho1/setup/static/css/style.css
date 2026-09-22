@@ -1,0 +1,1253 @@
+/* ==========================================================================
+   IFBet - folha de estilo
+   Conceito: "campo + cupom". Cada jogo é um campo visto de cima; o valor e a
+   odd ficam num cupom picotado; o bilhete é um recibo com bordas serrilhadas.
+   Para mudar as cores do site inteiro, edite só os tokens da seção 1.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Fontes (hospedadas em static/fonts, funcionam sem internet)
+   ========================================================================== */
+@font-face {
+    font-family: "Big Shoulders Display";
+    src: url("../fonts/big-shoulders-display-latin-wght-normal.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Schibsted Grotesk";
+    src: url("../fonts/schibsted-grotesk-latin-wght-normal.woff2") format("woff2");
+    font-weight: 400 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Mono";
+    src: url("../fonts/dm-mono-latin-400-normal.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Mono";
+    src: url("../fonts/dm-mono-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+}
+
+
+/* ==========================================================================
+   2. Tokens
+   ========================================================================== */
+:root {
+    /* campo */
+    --gramado: #1b5934;
+    --gramado-listra: #206a3d;
+    --giz: #f7f8f2;
+    --giz-linha: rgb(247 248 242 / 0.55);
+
+    /* interface */
+    --tinta: #10261a;
+    --tinta-suave: #4a5f52;
+    --fundo: #e7ece4;
+    --papel: #ffffff;
+    --papel-borda: #c5cdc1;
+
+    /* cartões do árbitro */
+    --amarelo: #ffd21f;
+    --amarelo-placar: #ffe45c;
+    --vermelho: #c9243a;
+    --verde-gol: #1e8a4c;
+
+    /* tipografia */
+    --fonte-display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+    --fonte-texto: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fonte-mono: "DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+    --largura: 1120px;
+}
+
+
+/* ==========================================================================
+   3. Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--fundo);
+    color: var(--tinta);
+    font: 400 1rem/1.55 var(--fonte-texto);
+}
+
+h1,
+h2,
+h3,
+p,
+dl,
+dd,
+ul {
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: inherit;
+}
+
+button,
+input {
+    font: inherit;
+    color: inherit;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.so-leitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.pular {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 200;
+    padding: 0.6rem 1rem;
+    background: var(--amarelo);
+    color: var(--tinta);
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.pular:focus {
+    top: 1rem;
+}
+
+:focus-visible {
+    outline: 3px solid var(--tinta);
+    outline-offset: 3px;
+}
+
+.topo :focus-visible,
+.conta :focus-visible,
+.campo :focus-visible {
+    outline-color: var(--amarelo);
+}
+
+.titulo-grande {
+    font: 800 clamp(2.6rem, 6vw, 4rem) / 0.95 var(--fonte-display);
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================================================
+   4. Estrutura da página: topo, conteúdo, rodapé
+   ========================================================================== */
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--tinta);
+    color: var(--giz);
+    box-shadow: 0 3px 0 var(--gramado);
+}
+
+.topo__miolo {
+    width: min(var(--largura), calc(100% - 2.5rem));
+    margin: 0 auto;
+    min-height: 4.25rem;
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+}
+
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+}
+
+.marca__logo {
+    width: 1.85rem;
+    height: 1.85rem;
+    color: var(--giz);
+}
+
+.marca__nome {
+    font: 800 1.9rem / 1 var(--fonte-display);
+    letter-spacing: 0.02em;
+}
+
+.marca__nome b {
+    color: var(--amarelo);
+    font-weight: 800;
+}
+
+.menu {
+    display: flex;
+    align-self: stretch;
+    gap: 0.35rem;
+}
+
+.menu a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.85rem;
+    color: rgb(247 248 242 / 0.78);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+
+.menu a:hover {
+    color: var(--giz);
+}
+
+.menu a[aria-current="page"] {
+    color: var(--giz);
+    border-bottom-color: var(--amarelo);
+}
+
+.quem {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.camisa {
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    background: var(--gramado);
+    color: var(--amarelo);
+    border: 2px solid var(--giz-linha);
+    border-radius: 50%;
+    font: 800 1.15rem / 1 var(--fonte-display);
+}
+
+.quem__trocar {
+    padding: 0.35rem 0.65rem;
+    color: rgb(247 248 242 / 0.78);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid rgb(247 248 242 / 0.3);
+    border-radius: 999px;
+    text-decoration: none;
+}
+
+.quem__trocar:hover {
+    color: var(--giz);
+    border-color: var(--giz);
+}
+
+.principal {
+    flex: 1;
+    padding: 2.5rem 0 4rem;
+}
+
+.miolo {
+    width: min(var(--largura), calc(100% - 2.5rem));
+    margin: 0 auto;
+}
+
+.rodape {
+    padding: 1.5rem 1.25rem;
+    color: var(--tinta-suave);
+    font-size: 0.875rem;
+    text-align: center;
+    border-top: 1px solid var(--papel-borda);
+}
+
+
+/* ==========================================================================
+   5. Avisos (mensagens flash): o cartão do árbitro
+   ========================================================================== */
+.avisos {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+}
+
+.aviso {
+    --cor: var(--tinta-suave);
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.95rem;
+    align-items: start;
+    padding: 0.95rem 1.15rem;
+    background: var(--papel);
+    border: 1px solid var(--papel-borda);
+    border-left: 6px solid var(--cor);
+    border-radius: 8px;
+    animation: aviso-cai 0.4s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+
+.aviso::before {
+    content: "";
+    width: 0.95rem;
+    height: 1.3rem;
+    margin-top: 0.15rem;
+    background: var(--cor);
+    border-radius: 2px;
+    transform: rotate(-8deg);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
+}
+
+.aviso--sucesso {
+    --cor: var(--verde-gol);
+}
+
+.aviso--erro {
+    --cor: var(--vermelho);
+}
+
+.aviso--aviso {
+    --cor: var(--amarelo);
+}
+
+.aviso__titulo {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.aviso__detalhes {
+    margin-top: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--tinta-suave);
+}
+
+.aviso__detalhes summary {
+    cursor: pointer;
+    width: fit-content;
+}
+
+.aviso__detalhes pre {
+    margin: 0.5rem 0 0;
+    padding: 0.7rem 0.85rem;
+    background: var(--fundo);
+    border-radius: 6px;
+    font: 400 0.8rem / 1.5 var(--fonte-mono);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+@keyframes aviso-cai {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+
+/* ==========================================================================
+   6. Botões
+   ========================================================================== */
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    background: transparent;
+    color: inherit;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.botao:hover {
+    background: rgb(127 127 127 / 0.14);
+}
+
+.botao--amarelo {
+    background: var(--amarelo);
+    color: var(--tinta);
+    border-color: var(--tinta);
+}
+
+.botao--amarelo:hover {
+    background: var(--amarelo);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 0 var(--tinta);
+}
+
+.botao--amarelo:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.botao:disabled {
+    opacity: 0.6;
+    cursor: progress;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* ==========================================================================
+   7. Painel: barra lateral (saldo e estatísticas) + lista de jogos
+   ========================================================================== */
+.painel {
+    display: grid;
+    grid-template-columns: 17.5rem minmax(0, 1fr);
+    gap: 2.75rem;
+    align-items: start;
+}
+
+.conta {
+    position: sticky;
+    top: 5.75rem;
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--tinta);
+    color: var(--giz);
+    border-radius: 10px;
+}
+
+.conta__saldo-rotulo {
+    color: rgb(247 248 242 / 0.75);
+    font-size: 0.95rem;
+}
+
+.conta__saldo {
+    margin-top: 0.15rem;
+    color: var(--amarelo);
+    font: 800 3.1rem / 1 var(--fonte-display);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.conta__dados {
+    display: grid;
+    border-top: 1px solid rgb(247 248 242 / 0.22);
+}
+
+.conta__dados > div {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgb(247 248 242 / 0.22);
+}
+
+.conta__dados dt {
+    color: rgb(247 248 242 / 0.75);
+    font-size: 0.875rem;
+}
+
+.conta__dados dd {
+    font: 700 1.5rem / 1.2 var(--fonte-display);
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.jogos__cab {
+    margin-bottom: 1.75rem;
+}
+
+.jogos__cab p {
+    margin-top: 0.6rem;
+    color: var(--tinta-suave);
+    font-size: 1.05rem;
+}
+
+.lista-jogos {
+    display: grid;
+    gap: 1.75rem;
+}
+
+
+/* ==========================================================================
+   8. O jogo: campo visto de cima + cupom de aposta
+   ========================================================================== */
+.jogo {
+    position: relative;
+    overflow: hidden;
+    background: var(--papel);
+    border-radius: 12px 12px 6px 6px;
+    box-shadow: 0 0 0 1px var(--papel-borda), 0 3px 0 var(--papel-borda);
+}
+
+.jogo__cab {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+}
+
+.jogo__cab time {
+    color: var(--tinta);
+    font-weight: 700;
+}
+
+.jogo__etiqueta {
+    padding: 0.1rem 0.6rem;
+    background: var(--tinta);
+    color: var(--giz);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* --- o campo --- */
+.campo {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 10rem;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--gramado) 0 12.5%,
+        var(--gramado-listra) 12.5% 25%
+    );
+    color: var(--giz);
+}
+
+/* camada com todas as linhas de giz (o único movimento da página) */
+.campo__giz {
+    position: absolute;
+    inset: 0.7rem;
+    z-index: -1;
+    pointer-events: none;
+    border: 2px solid var(--giz-linha);
+    background: linear-gradient(var(--giz-linha), var(--giz-linha)) center / 2px 100% no-repeat;
+    animation: giz-desenrola 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 130ms);
+}
+
+.campo__giz::before,
+.campo__giz::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 13%;
+    height: 60%;
+    transform: translateY(-50%);
+    border: 2px solid var(--giz-linha);
+}
+
+.campo__giz::before {
+    left: -2px;
+    border-left: 0;
+}
+
+.campo__giz::after {
+    right: -2px;
+    border-right: 0;
+}
+
+.campo__centro {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5.5rem;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--giz-linha);
+    border-radius: 50%;
+}
+
+@keyframes giz-desenrola {
+    from {
+        clip-path: inset(0 50% 0 50%);
+        opacity: 0;
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+    }
+}
+
+.lado {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.6rem 1.75rem 1.6rem 2.1rem;
+}
+
+.lado--visitante {
+    flex-direction: row-reverse;
+    padding: 1.6rem 2.1rem 1.6rem 1.75rem;
+    text-align: right;
+}
+
+.lado__time {
+    flex: 1;
+    min-width: 0;
+    font: 800 clamp(1.55rem, 2.7vw, 2.2rem) / 0.98 var(--fonte-display);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
+}
+
+/* --- placar de estádio: campo de gols com botões − e + --- */
+.placar {
+    display: grid;
+    grid-template-areas: "mais" "campo" "menos";
+    width: 3.75rem;
+    flex: none;
+}
+
+.placar input,
+.placar__final {
+    grid-area: campo;
+    width: 100%;
+    height: 3.75rem;
+    padding: 0;
+    background: var(--tinta);
+    color: var(--amarelo-placar);
+    border: 2px solid var(--giz-linha);
+    border-radius: 5px;
+    font: 900 2.6rem / 1 var(--fonte-display);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.placar__final {
+    display: grid;
+    place-items: center;
+}
+
+.placar input::-webkit-inner-spin-button,
+.placar input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.placar__passo {
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    color: var(--giz);
+    border: 0;
+    border-radius: 4px;
+    font: 700 1.4rem / 1 var(--fonte-texto);
+    cursor: pointer;
+}
+
+.placar__passo:hover {
+    background: rgb(247 248 242 / 0.18);
+}
+
+.placar__passo[data-passo="1"] {
+    grid-area: mais;
+}
+
+.placar__passo[data-passo="-1"] {
+    grid-area: menos;
+}
+
+/* --- cupom: valor, odd e botão (papel picotado) --- */
+.cupom {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: end;
+    padding: 1.25rem 1.5rem 1.4rem;
+    border-top: 2px dashed var(--papel-borda);
+}
+
+.cupom::before,
+.cupom::after {
+    content: "";
+    position: absolute;
+    top: -12px;
+    width: 22px;
+    height: 22px;
+    background: var(--fundo);
+    border-radius: 50%;
+}
+
+.cupom::before {
+    left: -11px;
+}
+
+.cupom::after {
+    right: -11px;
+}
+
+.cupom__campo {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.cupom__campo label {
+    color: var(--tinta-suave);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.cupom__entrada {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    border-bottom: 2px solid var(--tinta);
+}
+
+.cupom__entrada:focus-within {
+    outline: 3px solid var(--tinta);
+    outline-offset: 3px;
+}
+
+.cupom__entrada span {
+    color: var(--tinta-suave);
+    font: 400 1rem var(--fonte-mono);
+}
+
+.cupom__entrada input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0.15rem 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font: 500 1.5rem / 1.25 var(--fonte-mono);
+}
+
+.cupom__entrada input::placeholder {
+    color: #8a998f;
+}
+
+.cupom__dica {
+    color: var(--tinta-suave);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.botao-apostar {
+    min-height: 3.1rem;
+    padding: 0 2rem;
+    font: 800 1.45rem / 1 var(--fonte-display);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* --- jogo encerrado: campo apagado, sem cupom --- */
+.jogo--encerrado .campo {
+    filter: grayscale(0.85) brightness(0.92);
+}
+
+.encerrados {
+    margin-top: 2.25rem;
+}
+
+.encerrados > summary {
+    width: fit-content;
+    padding: 0.4rem 0;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.encerrados[open] > summary {
+    margin-bottom: 1rem;
+}
+
+
+/* ==========================================================================
+   9. Bilhetes: recibo com bordas serrilhadas
+   ========================================================================== */
+.pagina-cab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 2.25rem;
+}
+
+.pagina-cab p {
+    margin-top: 0.6rem;
+    color: var(--tinta-suave);
+    font-size: 1.05rem;
+}
+
+.pagina-cab__saldo {
+    padding: 0.7rem 1.1rem;
+    background: var(--tinta);
+    color: var(--giz);
+    border-radius: 8px;
+    text-align: right;
+}
+
+.pagina-cab__saldo span {
+    display: block;
+    color: rgb(247 248 242 / 0.75);
+    font-size: 0.85rem;
+}
+
+.pagina-cab__saldo strong {
+    color: var(--amarelo);
+    font: 800 1.9rem / 1.1 var(--fonte-display);
+    font-variant-numeric: tabular-nums;
+}
+
+.bilhetes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19.5rem), 1fr));
+    gap: 2.25rem 1.75rem;
+}
+
+.bilhete-sombra {
+    filter: drop-shadow(0 2px 0 rgb(16 38 26 / 0.14)) drop-shadow(0 10px 14px rgb(16 38 26 / 0.1));
+}
+
+.bilhete {
+    --raio: 7px;
+
+    height: 100%;
+    padding: 1.9rem 1.5rem 1.8rem;
+    background: var(--papel);
+    -webkit-mask:
+        radial-gradient(var(--raio) at 50% 0, #0000 98%, #000) top / calc(var(--raio) * 2.4) 51% repeat-x,
+        radial-gradient(var(--raio) at 50% 100%, #0000 98%, #000) bottom / calc(var(--raio) * 2.4) 51% repeat-x;
+    mask:
+        radial-gradient(var(--raio) at 50% 0, #0000 98%, #000) top / calc(var(--raio) * 2.4) 51% repeat-x,
+        radial-gradient(var(--raio) at 50% 100%, #0000 98%, #000) bottom / calc(var(--raio) * 2.4) 51% repeat-x;
+}
+
+.bilhete__topo {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: var(--tinta-suave);
+    font: 400 0.8rem / 1.4 var(--fonte-mono);
+}
+
+.bilhete__jogo {
+    margin-top: 0.8rem;
+    font: 800 1.65rem / 1.02 var(--fonte-display);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.bilhete__jogo span {
+    display: block;
+    color: var(--tinta-suave);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.bilhete__palpite {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 1.1rem 0 1.15rem;
+    padding: 0.6rem 0;
+    border-block: 2px dashed var(--papel-borda);
+}
+
+.bilhete__palpite span {
+    color: var(--tinta-suave);
+    font: 400 0.85rem var(--fonte-mono);
+}
+
+.bilhete__palpite strong {
+    font: 900 2.7rem / 1 var(--fonte-display);
+    letter-spacing: 0.02em;
+}
+
+.bilhete__linhas {
+    display: grid;
+    gap: 0.6rem;
+    font: 400 0.9rem / 1.4 var(--fonte-mono);
+}
+
+.bilhete__linhas > div {
+    display: flex;
+    align-items: baseline;
+}
+
+.bilhete__linhas dt {
+    display: flex;
+    flex: 1;
+    align-items: baseline;
+    color: var(--tinta-suave);
+}
+
+.bilhete__linhas dt::after {
+    content: "";
+    flex: 1;
+    margin: 0 0.4rem;
+    border-bottom: 2px dotted var(--papel-borda);
+    transform: translateY(-0.2em);
+}
+
+.bilhete__linhas dd {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.bilhete__linhas .linha--retorno {
+    margin-top: 0.35rem;
+    font-size: 1rem;
+}
+
+.bilhete__linhas .linha--retorno dt {
+    color: var(--tinta);
+    font-weight: 500;
+}
+
+.bilhete__linhas .linha--retorno dd {
+    padding: 0 0.25rem;
+    background: linear-gradient(transparent 55%, var(--amarelo) 55%);
+    font-weight: 500;
+}
+
+
+/* ==========================================================================
+   10. Escolha de usuário (página inicial)
+   ========================================================================== */
+.escolha {
+    max-width: 40rem;
+}
+
+.faixa-campo {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 2.6rem 2rem 2.4rem 2.6rem;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--gramado) 0 12.5%,
+        var(--gramado-listra) 12.5% 25%
+    );
+    color: var(--giz);
+    border-radius: 12px 12px 0 0;
+}
+
+.faixa-campo::before {
+    content: "";
+    position: absolute;
+    inset: 0.7rem;
+    z-index: -1;
+    border: 2px solid var(--giz-linha);
+    border-radius: 2px;
+    animation: giz-desenrola 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.faixa-campo::after {
+    content: "";
+    position: absolute;
+    right: -2.2rem;
+    top: 50%;
+    z-index: -1;
+    width: 8.5rem;
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    border: 2px solid var(--giz-linha);
+    border-radius: 50%;
+}
+
+.faixa-campo p {
+    margin-top: 0.7rem;
+    max-width: 26rem;
+    color: rgb(247 248 242 / 0.9);
+    font-size: 1.05rem;
+}
+
+.escalacao {
+    display: grid;
+    background: var(--papel);
+    border: 1px solid var(--papel-borda);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+}
+
+.escalacao li + li {
+    border-top: 1px solid var(--papel-borda);
+}
+
+.jogador {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.95rem 1.25rem 0.95rem 1.4rem;
+    text-decoration: none;
+}
+
+.jogador:hover {
+    background: var(--fundo);
+}
+
+.jogador .camisa {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.6rem;
+    border-color: var(--tinta);
+}
+
+.jogador__nome {
+    flex: 1;
+    font: 800 1.7rem / 1 var(--fonte-display);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+}
+
+.jogador__acao {
+    padding: 0.4rem 0.9rem;
+    border: 2px solid var(--tinta);
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.jogador:hover .jogador__acao {
+    background: var(--amarelo);
+}
+
+
+/* ==========================================================================
+   11. Estados vazios e página de erro
+   ========================================================================== */
+.vazio {
+    padding: 2.5rem 1.75rem;
+    background: var(--papel);
+    border: 2px dashed var(--papel-borda);
+    border-radius: 10px;
+}
+
+.vazio h2 {
+    font: 800 1.9rem / 1 var(--fonte-display);
+    text-transform: uppercase;
+}
+
+.vazio p {
+    max-width: 30rem;
+    margin: 0.6rem 0 1.25rem;
+    color: var(--tinta-suave);
+}
+
+.erro {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    max-width: 44rem;
+    padding: 2rem 0;
+}
+
+.erro__cartao {
+    flex: none;
+    width: 5.75rem;
+    height: 8rem;
+    background: var(--vermelho);
+    border-radius: 7px;
+    transform: rotate(-9deg);
+    box-shadow: 0 7px 0 rgb(16 38 26 / 0.18);
+}
+
+.erro p {
+    max-width: 30rem;
+    margin: 0.8rem 0 1.5rem;
+    color: var(--tinta-suave);
+    font-size: 1.1rem;
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================================================
+   12. Responsivo
+   ========================================================================== */
+@media (max-width: 900px) {
+    .painel {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+
+    .conta {
+        position: static;
+        grid-template-columns: 1fr 1fr;
+        align-items: end;
+        gap: 1rem 1.5rem;
+    }
+
+    .conta__saldo-bloco {
+        grid-column: 1 / -1;
+    }
+
+    .conta__dados {
+        display: contents;
+    }
+
+    .conta__dados > div {
+        border-top: 1px solid rgb(247 248 242 / 0.22);
+    }
+
+    .conta .botao {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 720px) {
+    /* sem áreas de pênalti no celular: elas atravessam o nome dos times */
+    .campo__giz::before,
+    .campo__giz::after {
+        display: none;
+    }
+
+    .topo__miolo {
+        flex-wrap: wrap;
+        gap: 0 1rem;
+        padding-top: 0.6rem;
+        min-height: 0;
+    }
+
+    .quem {
+        margin-left: auto;
+    }
+
+    .menu {
+        order: 3;
+        width: 100%;
+        min-height: 2.75rem;
+        margin: 0 -0.85rem;
+        overflow-x: auto;
+    }
+
+    .principal {
+        padding-top: 1.75rem;
+    }
+
+    .cupom {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.1rem 1.25rem;
+    }
+
+    .botao-apostar {
+        grid-column: 1 / -1;
+    }
+
+    /* campo: nome em cima, placar embaixo, botões lado a lado */
+    .lado,
+    .lado--visitante {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.9rem;
+        padding: 1.4rem 1.1rem 1.4rem 1.4rem;
+    }
+
+    .lado--visitante {
+        align-items: flex-end;
+        padding: 1.4rem 1.4rem 1.4rem 1.1rem;
+    }
+
+    .lado__time {
+        flex: none;
+    }
+
+    .placar {
+        grid-template-areas: "menos campo mais";
+        grid-template-columns: 2.4rem 3.1rem 2.4rem;
+        width: auto;
+    }
+
+    .placar input,
+    .placar__final {
+        height: 3.1rem;
+        font-size: 2.2rem;
+    }
+
+    .placar__passo {
+        height: 3.1rem;
+    }
+
+    .campo__centro {
+        width: 4.25rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .quem__nome {
+        display: none;
+    }
+
+    .erro {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .faixa-campo {
+        padding: 2rem 1.4rem;
+    }
+
+    .jogador__acao {
+        padding: 0.35rem 0.7rem;
+    }
+}
+
+@media (pointer: coarse) {
+    .placar__passo {
+        min-height: 2.6rem;
+    }
+}
+
+
+/* ==========================================================================
+   13. Movimento reduzido
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

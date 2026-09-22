@@ -1,0 +1,28 @@
+{# Macros reutilizáveis (importadas com {% from "_macros.html" import ... %}) #}
+
+{# Data do jogo no formato: "sáb 19/09, 14h05". Recebe um datetime. #}
+{% macro data_jogo(dt) -%}
+{%- if dt -%}
+    {%- set dias = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'] -%}
+    {{ dias[dt.weekday()] }} {{ dt.strftime('%d/%m') }}, {{ dt.strftime('%Hh%M') }}
+{%- else -%}
+    data a definir
+{%- endif -%}
+{%- endmacro %}
+
+{# Odd com duas casas e vírgula: 0.5 -> "0,50". #}
+{% macro odd(valor) -%}
+{%- if valor is not none -%}{{ '%.2f' | format(valor) | replace('.', ',') }}{%- else -%}—{%- endif -%}
+{%- endmacro %}
+
+{# Frase de contagem: 1 -> "1 jogo aberto", 3 -> "3 jogos abertos". #}
+{% macro contagem(n, singular, plural) -%}
+{{ n }} {{ singular if n == 1 else plural }}
+{%- endmacro %}
+
+{# Valor em reais. Usa o filtro brl; se ele não conseguir formatar (ex.: MONEY do servidor em
+   outro idioma, como "$100.00"), mostra o valor original em vez de esconder a informação. #}
+{% macro dinheiro(valor) -%}
+{%- set formatado = valor | brl -%}
+{{ valor if (formatado == '—' and valor is not none) else formatado }}
+{%- endmacro %}
