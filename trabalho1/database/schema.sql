@@ -50,30 +50,22 @@ CREATE TABLE jogo (
     gols_da_casa integer,
     gols_do_visitante integer
 );
-INSERT INTO jogo (equipe_casa_id, equipe_visitante_id) VALUES
+INSERT INTO jogo (equipe_casa_id, equipe_visitante_id, data_hora) VALUES
 (1, 6, now() + interval '1 day'),
 (2, 3, now() + interval '2 days'),
 (4, 5, now() + interval '3 days');
 
--- jogo já encerrado (tem placar): NÃO deve aparecer em liste_jogos()
+-- Inserir o jogo encerrado (especificando os gols)
 INSERT INTO jogo (equipe_casa_id, equipe_visitante_id, data_hora, gols_da_casa, gols_do_visitante) VALUES
-(5, 2, now() - interval '2 days', 2, 1),
--- Amanhã
+(5, 2, now() - interval '2 days', 2, 1);
+
+-- Inserir os jogos futuros (omitindo os gols para que fiquem NULL)
+INSERT INTO jogo (equipe_casa_id, equipe_visitante_id, data_hora) VALUES
 (1, 6, now() + interval '1 day'),
-
--- Em 2 dias
 (2, 3, now() + interval '2 days'),
-
--- Em 3 dias
 (4, 5, now() + interval '3 days'),
-
--- Em 4 dias
 (7, 8, now() + interval '4 days'),
-
--- Em 5 dias
 (9, 10, now() + interval '5 days'),
-
--- Em 6 dias
 (11, 12, now() + interval '6 days');
 
 
