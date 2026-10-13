@@ -18,7 +18,7 @@ BEGIN
 
     -- Versão Mais Direta
     /*
-    RETURNS EXISTS(
+    RETURN EXISTS(
         SELECT 1
         FROM usuario
         WHERE id = var_usuario_id
