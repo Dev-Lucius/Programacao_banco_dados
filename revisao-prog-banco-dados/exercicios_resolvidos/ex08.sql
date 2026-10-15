@@ -16,16 +16,20 @@ DECLARE
     situacao TEXT;
 BEGIN
     SELECT status
-    INTO var_saldo
+    INTO var_status
     FROM usuario
     WHERE id = var_usuario_id;
 
+    IF NOT FOUND THEN
+        RETURN 'USUARIO NAO EXISTE';
+    END IF;
+
     CASE
-        WHEN status = true THEN
-            situacao := "ATIVO";
+        WHEN var_status = TRUE THEN
+            situacao := 'ATIVO';
 
         ELSE
-            situacao := "INATIVO";
+            situacao := 'INATIVO';
     END CASE;
 
     RETURN situacao;
