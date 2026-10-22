@@ -26,7 +26,7 @@
 --     Usuários sem apostas em jogos encerrados não devem aparecer.
 --     Ordene pelo premio_total em ordem decrescente e, em caso de empate, pelo
 
-CREATE OR REPLACE FUNCTION premiacao_acertos_exatos() RETURN TABLE(
+CREATE OR REPLACE FUNCTION premiacao_acertos_exatos() RETURNS TABLE(
     usuario_id INTEGER,
     nome_usuario TEXT,
     apostas_encerradas BIGINT,
@@ -55,7 +55,7 @@ BEGIN
         ) AS acertos_exatos,
 
         -- Total Apostado
-        SUM(a.valor::NUMERIC) AS total_apost,
+        SUM(a.valor::NUMERIC)::MONEY AS total_apost,
 
         -- Premiacao
         COALESCE(
@@ -75,7 +75,10 @@ BEGIN
         ON j.id = a.jogo_id
 
     -- Considera Encerrados Jogos com placar Registrado
-    WHERE j,.gols
-    GROUP BY u.id, u.nome; 
+    WHERE j.gols_da_casa IS NOT NULL AND j.gols_do_visitante IS NOT NULL 
+    GROUP BY u.id, u.nome
+    ORDER BY 
+        premio_total DESC,
+        u.id; 
 END;
 $$;
