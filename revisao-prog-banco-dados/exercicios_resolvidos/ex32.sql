@@ -10,6 +10,17 @@ DECLARE
     var_somatorio NUMERIC := 0;
     registro_apostas_usuario RECORD;
 BEGIN
+    
+    PERFORM 1 FROM usuario u WHERE u.id = var_usuario_id;
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Usuário % Não Existe', var_usuario_id;
+    END IF;
+
+    PERFORM 1 FROM aposta a WHERE a.usuario_id = var_usuario_id;
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Usuário % Nunca Fez Nenhuma Aposta', var_usuario_id;
+    END IF;
+
     FOR registro_apostas_usuario IN
         SELECT
             u.nome,
