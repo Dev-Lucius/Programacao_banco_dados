@@ -34,7 +34,7 @@ BEGIN
         RAISE EXCEPTION 'Usuário % Não Possui Saldo Suficiente para um Saque !', var_usuario_id;
     END IF;
 
-    -- Tendo Validado os Parâmetros ... Podemos fazer o Deposito
+    -- Tendo Validado os Parâmetros ... Podemos fazer o Saque
     UPDATE usuario 
     SET saldo = saldo::NUMERIC - var_valor
     WHERE id = var_usuario_id;
