@@ -41,6 +41,10 @@ DECLARE
     registro_aposta_percorrida RECORD;
 BEGIN
 
+    IF var_valor IS NULL OR var_valor < 0 THEN
+        RAISE EXCEPTION 'O Valor deve ser maior ou igual a Zero.';
+    END IF;
+
     FOR registro_aposta_percorrida IN
         SELECT
             u.nome,
