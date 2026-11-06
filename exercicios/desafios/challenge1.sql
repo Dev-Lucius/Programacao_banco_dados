@@ -3,7 +3,7 @@ RETURNS TABLE(
     var_aposta_id INTEGER,
     var_usuario_id INTEGER,
     var_jogo_id INTEGER,
-    var_jogo MONEY,
+    var_valor MONEY,
     var_times TEXT,
     var_gols_da_casa INTEGER,
     var_gols_do_visitante INTEGER
