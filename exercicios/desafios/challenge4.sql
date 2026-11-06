@@ -44,7 +44,7 @@ BEGIN
             COUNT(*) FILTER (WHERE pa.marcados < pa.sofridos)::INTEGER as der,
             COALESCE(SUM(pa.marcados), 0)::INTEGER AS g_pro,
             COALESCE(SUM(pa.sofridos), 0)::INTEGER AS g_contra,
-        FROM equipe eq,
+        FROM equipe eq
         LEFT JOIN partidas pa 
             ON pa.eq = eq.id
         GROUP BY eq.id, eq.nome
