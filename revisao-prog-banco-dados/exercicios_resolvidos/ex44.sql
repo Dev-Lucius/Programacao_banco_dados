@@ -1,12 +1,14 @@
 -- Exercício 44 – Divisão por zero
 
 -- Crie uma função:
-
 -- divisao(valor, quantidade)
 
 -- que realize uma divisão.
-
 -- Trate o caso de quantidade = 0 utilizando EXCEPTION.
+
+-- NO_DATA_FOUND	|    Nenhum registro encontrado com SELECT INTO STRICT.
+-- TOO_MANY_ROWS	|    Mais de um registro encontrado com SELECT INTO STRICT.
+-- DIVISION_BY_ZERO	|    Tentativa de divisão por zero.
 
 CREATE OR REPLACE FUNCTION divisao(var_valor NUMERIC, var_quantidade INTEGER) RETURNS NUMERIC
 LANGUAGE plpgsql
