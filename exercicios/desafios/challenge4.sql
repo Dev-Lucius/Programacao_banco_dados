@@ -1,9 +1,3 @@
--- =====================================================================
--- DESAFIO 4: tabela de classificação
--- Vitória = 3 pontos, empate = 1, derrota = 0.
--- Desempate: pontos, vitórias, saldo de gols, gols pró, nome.
--- =====================================================================
-
 CREATE OR REPLACE FUNCTION classificacao()
 RETURNS TABLE (
     nome_time TEXT,
@@ -14,8 +8,9 @@ RETURNS TABLE (
     gp INTEGER,
     gc INTEGER,
     sg INTEGER
-) AS
-$$
+)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY
     WITH partidas AS(
@@ -28,11 +23,11 @@ BEGIN
         AND j.gols_do_visitante IS NOT NULL
         UNION ALL
         SELECT 
-            j.equipe_visitante,
+            j.equipe_visitante_id,
             j.gols_do_visitante,
             j.gols_da_casa
         FROM jogo j
-        WHERE j.jogo IS NOT NULL
+        WHERE j.gols_da_casa IS NOT NULL
         AND j.gols_do_visitante IS NOT NULL
     ),
     resumo AS (
