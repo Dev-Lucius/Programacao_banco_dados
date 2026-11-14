@@ -165,3 +165,48 @@ $$;
 
 SELECT * FROM fn_calcular_valor_inscricao(1, 4);
 -- 75 * (1 - 0) = 75
+
+
+-- 3. fn_relatorio_ocupacao()
+CREATE OR REPLACE FUNCTION fn_relatorio_ocupacao()
+RETURNS TABLE (
+    evento_id INTEGER,
+    titulo VARCHAR(100),
+    vagas INTEGER,
+    confirmados BIGINT,
+    lista_espera BIGINT,
+    percentual_ocupacao NUMERIC,
+    arrecadacao NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    RETURN QUERY
+
+    SELECT
+        e.id,
+        e.titulo,
+        e.vagas,
+        -- 1. Contando inscrições confirmadas
+        COUNT(i.id) FILTER (WHERE i.status = 'confirmada') AS confirmados,
+
+        -- 2. Contando inscrições na lista de espera
+        COUNT(i.id) FILTER (WHERE i.status = 'lista_espera') AS lista_espera,
+
+        -- 3. Calculando percentual de ocupação
+        ROUND((COUNT(i.id) FILTER (WHERE i.status = 'confirmada'))::NUMERIC * 100 / e.vagas, 2) AS percentual_ocupacao,
+
+        -- 4. Calculando arrecadação
+        COALESCE(SUM(i.valor_pago) FILTER (WHERE i.status = 'confirmada'),0::NUMERIC) AS arrecadacao
+    FROM evento e
+    LEFT JOIN inscricao i
+        ON i.evento_id = e.id
+    GROUP BY
+        e.id,
+        e.titulo,
+        e.vagas
+    ORDER BY e.id;
+END;
+$$;
+
