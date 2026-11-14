@@ -100,3 +100,68 @@ BEGIN
     RETURN NULL    
 END;
 $$;
+
+-- 3. fn_calcular_valor_inscricao
+-- Objetivo: calcular o preço de uma inscrição aplicando desconto conforme o tipo do participante.
+CREATE OR REPLACE FUNCTION fn_calcular_valor_inscricao(p_participante INTEGER, p_evento INTEGER) RETURNS NUMERIC(10, 2)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    var_tipo_part tipo_participante;
+    var_valor_base NUMERIC(10, 2);
+    var_status_evento status_evento;
+
+    var_desconto NUMERIC(4, 2);
+    var_valor_inscricao NUMERIC(10, 2);
+BEGIN
+    -- Recuperar o tipo do participante
+    SELECT
+        p.tipo
+    INTO
+        var_tipo_part
+    FROM participante p
+    WHERE p.id = p_participante;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Participante % Não Foi Encontrado', p_participante;
+    END IF;
+
+    -- Recuperar o valor_base do Evento
+    SELECT
+        e.status,
+        e.valor_base
+    INTO
+        var_status_evento,
+        var_valor_base
+    FROM evento e
+    WHERE e.id = p_evento;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Evento % Não Foi Encontrado', p_evento;
+    END IF; 
+
+    IF var_status_evento = 'cancelado' THEN
+        RAISE EXCEPTION 'Evento % Está Cancelado', p_evento;
+    ELSIF var_status_evento = 'encerrado' THEN
+        RAISE EXCEPTION 'Evento % Está Encerrado', p_evento;
+    ELSE
+        RAISE NOTICE 'Evento % Está Aberto', p_evento;
+    END IF;
+
+    -- Aplicar Desconto
+    IF var_tipo_part = 'estudante' THEN
+        var_desconto := 0.50;
+    ELSIF var_tipo_part = 'professor' THEN
+        var_desconto := 0.30;
+    ELSE 
+        var_desconto := 0.00;
+    END IF;
+
+    -- Retornar Valor Final
+    var_valor_inscricao := ROUND(var_valor_base * (1 - var_desconto), 2);
+    RETURN var_valor_inscricao;
+END;
+$$;
+
+SELECT * FROM fn_calcular_valor_inscricao(1, 4);
+-- 75 * (1 - 0) = 75
