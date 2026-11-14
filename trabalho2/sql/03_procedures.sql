@@ -58,3 +58,59 @@ $$;
 CALL sp_realizar_inscricao(27, 1);
 -- Raise Exception
 -- Participante 27 Já Está Inscrito No Evento % 1
+
+-- 2. sp_cancelar_inscricao
+CREATE OR REPLACE PROCEDURE sp_cancelar_inscricao(p_inscricao INTEGER)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    var_evento INTEGER,
+    var_status_atual status_inscricao;
+    var_prox_inscricao INTEGER;
+BEGIN
+    -- Recuperar a Inscrição
+    SELECT
+        i.evento_id,
+        i.status
+    INTO
+        var_evento,
+        var_status_atual
+    FROM inscricao i
+    WHERE i.id = p_inscricao
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Inscrição % Não Encontrada', p_inscricao;
+    END IF;
+
+    -- Cancelando a Inscrição
+    UPDATE inscricao
+    SET status = 'cancelada'
+    WHERE id = p_inscricao;
+
+    -- Verificar se Precisamos Promover Alguém
+    IF var_status_atual = 'confirmada' THEN
+        -- Procurar prox participante
+        SELECT
+            i.id
+        INTO 
+            var_prox_inscricao
+        FROM inscricao i
+        WHERE 
+            i.evento_id = var_evento
+            AND i.status = 'lista_espera'
+        ORDER BY
+            i.data_inscricao ASC,
+            i.id ASC
+        LIMIT 1
+        FOR UPDATE;
+    END IF;
+
+    -- Promovendo Participante
+    IF FOUND THEN
+        UPDATE inscricao
+        SET status = 'confirmada'
+        WHERE id = var_prox_inscricao;
+    END IF;
+END;
+$$;
