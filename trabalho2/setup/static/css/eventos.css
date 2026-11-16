@@ -1,0 +1,125 @@
+
+/* ========================================
+   TABELA DE EVENTOS
+======================================== */
+
+.tabela-container {
+    width: 100%;
+    /* overflow-x: auto; */
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    border: 1px solid var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+}
+
+.tabela {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+/* Cabeçalho */
+
+.tabela thead {
+    background: var(--cor-superficie-secundaria);
+}
+
+.tabela th {
+    padding: 1rem 1.2rem;
+    color: var(--cor-texto-secundario);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Corpo */
+
+.tabela td {
+    padding: 1.1rem 1.2rem;
+    color: var(--cor-texto);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela tbody tr {
+    transition: background 0.2s ease;
+}
+
+.tabela tbody tr:hover {
+    background: var(--cor-superficie-secundaria);
+}
+
+.tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Primeira coluna */
+
+.tabela td:first-child {
+    font-weight: 600;
+}
+
+/* Valores monetários */
+
+.tabela td:nth-child(7) {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ========================================
+   ETIQUETAS DE STATUS
+======================================== */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status--aberto {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.12);
+}
+
+.status--encerrado {
+    color: #facc15;
+    background: rgba(250, 204, 21, 0.12);
+}
+
+.status--cancelado {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+}
+
+/* ========================================
+   ESTADO VAZIO
+======================================== */
+
+.estado-vazio {
+    margin-top: 2rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    border: 1px dashed var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+}
+
+.estado-vazio h2 {
+    margin-bottom: 0.5rem;
+}
+
+.estado-vazio p {
+    margin-bottom: 1.5rem;
+    color: var(--cor-texto-secundario);
+}
