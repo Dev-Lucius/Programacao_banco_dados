@@ -1,0 +1,580 @@
+/* ==================================================
+   1. VARIÁVEIS GLOBAIS
+================================================== */
+
+:root {
+
+    --cor-principal: #10261a;
+    --cor-secundaria: #245c42;
+    --cor-destaque: #387653;
+
+    --cor-fundo: #f5f7f5;
+    --cor-superficie: #ffffff;
+    --cor-borda: #dce5dd;
+
+    --cor-texto: #1c2b22;
+    --cor-texto-secundario: #657269;
+
+    --cor-sucesso: #237847;
+    --cor-erro: #bd4141;
+    --cor-alerta: #b7791f;
+
+    --sombra-suave: 0 4px 16px rgba(16, 38, 26, 0.06);
+
+    --raio: 12px;
+    --raio-pequeno: 8px;
+
+    --largura-conteudo: 1080px;
+}
+
+
+/* ==================================================
+   2. FONTES
+================================================== */
+
+@font-face {
+    font-family: "Schibsted Grotesk";
+
+    src: url("../fonts/schibsted-grotesk-latin-wght-normal.woff2")
+         format("woff2");
+
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Big Shoulders Display";
+
+    src: url("../fonts/big-shoulders-display-latin-wght-normal.woff2")
+         format("woff2");
+
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+
+/* ==================================================
+   3. RESET E CONFIGURAÇÕES GERAIS
+================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+
+    font-family: "Schibsted Grotesk", sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ==================================================
+   4. ACESSIBILIDADE
+================================================== */
+
+.pular {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+
+    background: var(--cor-principal);
+    color: white;
+
+    padding: 10px 16px;
+    border-radius: var(--raio-pequeno);
+
+    z-index: 1000;
+}
+
+.pular:focus {
+    top: 12px;
+}
+
+:focus-visible {
+    outline: 3px solid #78a98b;
+    outline-offset: 3px;
+}
+
+
+/* ==================================================
+   5. CABEÇALHO
+================================================== */
+
+.topo {
+    background: var(--cor-principal);
+    color: white;
+
+    box-shadow: var(--sombra-suave);
+}
+
+.topo__miolo {
+    width: min(
+        var(--largura-conteudo),
+        calc(100% - 40px)
+    );
+
+    min-height: 76px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 28px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    white-space: nowrap;
+}
+
+.marca__logo {
+    width: 34px;
+    height: 34px;
+}
+
+.marca__nome {
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
+}
+
+.marca__nome b {
+    color: #9bc9a8;
+    font-weight: 800;
+}
+
+
+/* ==================================================
+   6. MENU DE NAVEGAÇÃO
+================================================== */
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu a {
+    padding: 9px 13px;
+
+    border-radius: var(--raio-pequeno);
+
+    color: #d5e3d8;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.menu a:hover {
+    background: rgba(255, 255, 255, 0.10);
+    color: white;
+}
+
+.menu a[aria-current="page"] {
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+}
+
+
+/* ==================================================
+   7. CONTEÚDO PRINCIPAL
+================================================== */
+
+.principal {
+    flex: 1;
+
+    padding: 48px 0 64px;
+}
+
+.miolo {
+    width: min(
+        var(--largura-conteudo),
+        calc(100% - 40px)
+    );
+
+    margin: 0 auto;
+}
+
+
+/* ==================================================
+   8. PÁGINAS E CABEÇALHOS
+================================================== */
+
+.pagina {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 0 auto;
+}
+
+.pagina__cabecalho {
+    margin-bottom: 30px;
+}
+
+.pagina__cabecalho h1 {
+    color: var(--cor-principal);
+
+    font-family: "Big Shoulders Display", sans-serif;
+    font-size: 38px;
+    font-weight: 750;
+
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+}
+
+.pagina__cabecalho p {
+    margin-top: 8px;
+
+    color: var(--cor-texto-secundario);
+    font-size: 15px;
+}
+
+
+/* ==================================================
+   9. FORMULÁRIOS
+================================================== */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    padding: 32px;
+
+    background: var(--cor-superficie);
+
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+
+    box-shadow: var(--sombra-suave);
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo label {
+    color: var(--cor-texto);
+
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    min-height: 46px;
+
+    padding: 11px 13px;
+
+    color: var(--cor-texto);
+    background: #ffffff;
+
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+    color: #9aa69d;
+}
+
+.campo input:hover,
+.campo select:hover,
+.campo textarea:hover {
+    border-color: #aabdad;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    outline: none;
+
+    border-color: var(--cor-destaque);
+
+    box-shadow: 0 0 0 3px rgba(56, 118, 83, 0.12);
+}
+
+.campo textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.campo select {
+    cursor: pointer;
+}
+
+.campo__ajuda {
+    color: var(--cor-texto-secundario);
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   10. BOTÕES
+================================================== */
+
+.formulario__acoes {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 10px;
+}
+
+.botao {
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 20px;
+
+    border: 1px solid transparent;
+    border-radius: var(--raio-pequeno);
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.botao:hover {
+    transform: translateY(-1px);
+}
+
+.botao--primario {
+    background: var(--cor-secundaria);
+    color: white;
+}
+
+.botao--primario:hover {
+    background: var(--cor-principal);
+    box-shadow: var(--sombra-suave);
+}
+
+.botao--secundario {
+    background: white;
+    color: var(--cor-texto);
+
+    border-color: var(--cor-borda);
+}
+
+.botao--secundario:hover {
+    background: var(--cor-fundo);
+    border-color: #aabdad;
+}
+
+
+/* ==================================================
+   11. MENSAGENS FLASH
+================================================== */
+
+.avisos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.aviso {
+    padding: 15px 18px;
+
+    border-radius: var(--raio-pequeno);
+    border: 1px solid transparent;
+
+    background: white;
+}
+
+.aviso__titulo {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.aviso--success {
+    background: #edf7ef;
+    color: #21683b;
+    border-color: #cbe7d1;
+}
+
+.aviso--erro,
+.aviso--danger {
+    background: #fdf0f0;
+    color: #a42f2f;
+    border-color: #f0cece;
+}
+
+.aviso--warning {
+    background: #fff8e9;
+    color: #946317;
+    border-color: #f1dfb5;
+}
+
+.aviso--info {
+    background: #eff5fb;
+    color: #315f91;
+    border-color: #d1e1f1;
+}
+
+.aviso__detalhes {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.aviso__detalhes summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.aviso__detalhes pre {
+    margin-top: 8px;
+    padding: 12px;
+
+    overflow-x: auto;
+    white-space: pre-wrap;
+
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+
+/* ==================================================
+   12. RODAPÉ
+================================================== */
+
+.rodape {
+    padding: 24px 20px;
+
+    background: white;
+    border-top: 1px solid var(--cor-borda);
+
+    text-align: center;
+
+    color: var(--cor-texto-secundario);
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   13. RESPONSIVIDADE
+================================================== */
+
+@media (max-width: 760px) {
+
+    .topo__miolo {
+        padding: 18px 0;
+
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 16px;
+    }
+
+    .menu {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .menu a {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .principal {
+        padding: 32px 0 44px;
+    }
+
+    .pagina__cabecalho h1 {
+        font-size: 32px;
+    }
+
+    .formulario {
+        padding: 22px;
+    }
+
+    .formulario__acoes {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .formulario__acoes .botao {
+        width: 100%;
+    }
+}
+
+
+/* ==================================================
+   14. MOVIMENTO REDUZIDO
+================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+
+}
