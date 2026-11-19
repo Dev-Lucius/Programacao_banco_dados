@@ -1,5 +1,3 @@
--- Os comandos CREATE DATABASE e \c só funcionam no psql.
--- Se for executar por outra ferramenta, remova estas duas linhas.
 CREATE DATABASE sistemas_eventos_inscricoes;
 \c sistemas_eventos_inscricoes
 
