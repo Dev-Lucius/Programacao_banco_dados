@@ -5,20 +5,26 @@
 
 .tabela-container {
     width: 100%;
-    /* overflow-x: auto; */
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    border: 1px solid var(--cor-borda);
+    margin: 2rem auto;
+    overflow-x: auto;
+    border: 2px solid var(--cor-borda);
     border-radius: 12px;
     background: var(--cor-superficie);
 }
 
 .tabela {
-    width: 100%;
+    width: 95%;
     min-width: 1050px;
+    margin: 0 auto;
     border-collapse: collapse;
-    text-align: left;
+    text-align: center;
+}
+
+.tabela th,
+.tabela td {
+    padding: 1rem 1.2rem;
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* Cabeçalho */
@@ -122,4 +128,194 @@
 .estado-vazio p {
     margin-bottom: 1.5rem;
     color: var(--cor-texto-secundario);
+}
+
+
+/* ========================================
+   FORMULÁRIO DE EVENTOS
+======================================== */
+
+.evento-formulario {
+    width: 100%;
+    max-width: 850px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+}
+
+/* Grade do formulário */
+
+.evento-formulario__grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.campo--completo {
+    grid-column: 1 / -1;
+}
+
+/* Labels */
+
+.campo label {
+    color: var(--cor-texto);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Campos de entrada */
+
+.campo input,
+.campo select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem 0.9rem;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: 0.875rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    outline: none;
+    background: var(--cor-superficie-secundaria);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Placeholder */
+
+.campo input::placeholder {
+    color: var(--cor-texto-secundario);
+    opacity: 0.7;
+}
+
+/* Foco */
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Opções do select */
+
+.campo select option {
+    color: var(--cor-texto);
+    background: var(--cor-superficie);
+}
+
+/* Ações */
+
+.evento-formulario__acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--cor-borda);
+}
+
+
+/* Pesquisa da tabela */
+
+.tabela-pesquisa {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0 1rem;
+}
+
+.tabela-pesquisa__campo {
+    width: 100%;
+    padding: .75rem 1rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+    background: var(--cor-superficie);
+    color: var(--cor-texto);
+
+    font-size: .9rem;
+    outline: none;
+
+    transition: border-color .2s ease;
+}
+
+.tabela-pesquisa__campo:focus {
+    border-color: var(--cor-destaque);
+}
+
+.tabela-pesquisa__campo::placeholder {
+    color: var(--cor-texto-secundario);
+}
+
+
+/* Ordenação das colunas */
+
+.tabela-ordenavel {
+    cursor: pointer;
+    user-select: none;
+    transition: background .2s ease;
+}
+
+.tabela-ordenavel:hover {
+    background: var(--cor-superficie-secundaria);
+}
+
+.tabela-ordenavel[data-ordem="asc"]::after {
+    content: " ▲";
+    font-size: .7rem;
+}
+
+.tabela-ordenavel[data-ordem="desc"]::after {
+    content: " ▼";
+    font-size: .7rem;
+}
+
+
+@media (max-width: 600px) {
+
+    .tabela-pesquisa {
+        justify-content: stretch;
+    }
+
+    .tabela-pesquisa__campo {
+        width: 100%;
+    }
+
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .evento-formulario {
+        padding: 1.25rem;
+    }
+
+    .evento-formulario__grade {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .campo--completo {
+        grid-column: auto;
+    }
+
+    .evento-formulario__acoes {
+        flex-direction: column-reverse;
+    }
+
+    .evento-formulario__acoes .botao {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
 }

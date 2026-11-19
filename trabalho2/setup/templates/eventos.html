@@ -1,7 +1,16 @@
- 
+
 {% extends "base.html" %}
 
 {% block title %}Eventos | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/eventos.css') }}"
+    >
+{% endblock %}
 
 {% block content %}
 
@@ -72,5 +81,12 @@
     {% endif %}
 
 </section>
+{% block scripts %}
+    {{ super() }}
+    <script
+        src="{{ url_for('static', filename='js/tabelas.js') }}"
+        defer
+    ></script>
+{% endblock %}
 
 {% endblock %}

@@ -1,253 +1,208 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}Sistema de Eventos{% endblock %}</title>
 
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
 
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/eventos.css') }}"
-    >
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/eventos.css') }}"
+    />
 
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/inscricoes.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/auditoria.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
     {% block head %}{% endblock %}
-</head>
+  </head>
 
-<body>
-
+  <body>
     <!-- ==========================================
          ACESSIBILIDADE
     =========================================== -->
 
-    <a class="pular" href="#conteudo">
-        Pular para o conteúdo
-    </a>
-
+    <a class="pular" href="#conteudo"> Pular para o conteúdo </a>
 
     <!-- ==========================================
          CABEÇALHO
     =========================================== -->
 
     <header class="topo">
+      <div class="topo__miolo">
+        <!-- Identidade visual -->
+        <a
+          class="marca"
+          href="{{ url_for('main.index') }}"
+          aria-label="Sistema de Eventos, página inicial"
+        >
+          <svg class="marca__logo" viewBox="0 0 32 32" aria-hidden="true">
+            <rect
+              x="3"
+              y="6"
+              width="26"
+              height="23"
+              rx="4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            />
 
-        <div class="topo__miolo">
+            <path d="M3 12h26" stroke="currentColor" stroke-width="2.5" />
 
-            <!-- Identidade visual -->
-            <a
-                class="marca"
-                href="{{ url_for('main.index') }}"
-                aria-label="Sistema de Eventos, página inicial"
-            >
+            <path
+              d="M10 3v6M22 3v6"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
 
-                <svg
-                    class="marca__logo"
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                >
+            <path
+              d="M10 18h4M18 18h4M10 23h4"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
 
-                    <rect
-                        x="3"
-                        y="6"
-                        width="26"
-                        height="23"
-                        rx="4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                    />
+          <span class="marca__nome"> <b>Eventos</b> Acadêmicos </span>
+        </a>
 
-                    <path
-                        d="M3 12h26"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                    />
+        
+<!-- Menu principal -->
+<nav class="menu" aria-label="Principal">
 
-                    <path
-                        d="M10 3v6M22 3v6"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                    />
+    {% set pagina = request.endpoint %}
 
-                    <path
-                        d="M10 18h4M18 18h4M10 23h4"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    />
+    <!-- Página inicial -->
+    <a href="{{ url_for('main.index') }}"
+       {% if pagina == 'main.index' %}
+           aria-current="page"
+       {% endif %}>
+        Início
+    </a>
 
-                </svg>
+    <!-- Participantes -->
+    <a href="{{ url_for('participantes.novo_participante') }}"
+       {% if pagina == 'participantes.novo_participante' %}
+           aria-current="page"
+       {% endif %}>
+        Participantes
+    </a>
 
-                <span class="marca__nome">
-                    <b>Eventos</b> Acadêmicos
-                </span>
+    <!-- Eventos -->
+    <a href="{{ url_for('eventos.listar_eventos') }}"
+       {% if pagina == 'eventos.listar_eventos' %}
+           aria-current="page"
+       {% endif %}>
+        Eventos
+    </a>
 
-            </a>
+    <!-- Inscrições -->
+    <a href="{{ url_for('inscricoes.listar_inscricoes') }}"
+       {% if pagina == 'inscricoes.listar_inscricoes' %}
+           aria-current="page"
+       {% endif %}>
+        Inscrições
+    </a>
 
+    <!-- Auditoria -->
+    <a href="{{ url_for('auditoria.listar_auditoria') }}"
+       {% if pagina == 'auditoria.listar_auditoria' %}
+           aria-current="page"
+       {% endif %}>
+        Auditoria
+    </a>
 
-            <!-- Menu principal -->
-            <nav class="menu" aria-label="Principal">
+    <a href="{{ url_for('relatorios.listar_relatorios') }}"
+        {% if pagina == 'relatorios.listar_relatorios' %}
+            aria-current="page"
+        {% endif %}>
+            Relatórios
+    </a>
 
-                {% set pagina = request.endpoint %}
+</nav>
 
-                <!-- Página inicial -->
-                <a
-                    href="{{ url_for('main.index') }}"
-                    {% if pagina == 'main.index' %}
-                        aria-current="page"
-                    {% endif %}
-                >
-                    Início
-                </a>
-
-
-                <!-- Participantes -->
-                <a
-                    href="{{ url_for('participantes.novo_participante') }}"
-                    {% if pagina == 'participantes.novo_participante' %}
-                        aria-current="page"
-                    {% endif %}
-                >
-                    Participantes
-                </a>
-
-
-                <a
-                    href="{{ url_for('eventos.listar_eventos') }}"
-                    {% if pagina == 'eventos.listar_eventos' %}
-                        aria-current="page"
-                    {% endif %}
-                >
-                    Eventos
-                </a>
-                
-
-
-                {#
-                Futuramente adicionaremos:
-
-                <a href="{{ url_for('eventos.novo_evento') }}">
-                    Cadastrar evento
-                </a>
-
-                <a href="{{ url_for('inscricoes.nova_inscricao') }}">
-                    Inscrições
-                </a>
-
-                <a href="{{ url_for('auditoria.listar_auditoria') }}">
-                    Auditoria
-                </a>
-                #}
-
-            </nav>
-
-        </div>
-
+      </div>
     </header>
-
 
     <!-- ==========================================
          CONTEÚDO PRINCIPAL
     =========================================== -->
 
     <main id="conteudo" class="principal">
+      <div class="miolo">
+        <!-- Mensagens flash -->
+        {% with mensagens = get_flashed_messages(with_categories=true) %} {% if
+        mensagens %}
 
-        <div class="miolo">
+        <div class="avisos" role="status" aria-live="polite">
+          {% for categoria, mensagem in mensagens %} {% set linhas =
+          mensagem.split('\n') %}
 
-            <!-- Mensagens flash -->
-            {% with mensagens = get_flashed_messages(with_categories=true) %}
+          <div class="aviso aviso--{{ categoria }}">
+            <div>
+              <p class="aviso__titulo">
+                {% if categoria == 'erro' %}
+                <span class="so-leitor"> Erro: </span>
+                {% endif %} {{ linhas[0] }}
+              </p>
 
-                {% if mensagens %}
+              {% if linhas | length > 1 %}
 
-                    <div
-                        class="avisos"
-                        role="status"
-                        aria-live="polite"
-                    >
+              <details class="aviso__detalhes">
+                <summary>Detalhes técnicos</summary>
 
-                        {% for categoria, mensagem in mensagens %}
+                <pre>{{ linhas[1:] | join('\n') | trim }}</pre>
+              </details>
 
-                            {% set linhas = mensagem.split('\n') %}
+              {% endif %}
+            </div>
+          </div>
 
-                            <div class="aviso aviso--{{ categoria }}">
-
-                                <div>
-
-                                    <p class="aviso__titulo">
-
-                                        {% if categoria == 'erro' %}
-                                            <span class="so-leitor">
-                                                Erro:
-                                            </span>
-                                        {% endif %}
-
-                                        {{ linhas[0] }}
-
-                                    </p>
-
-                                    {% if linhas | length > 1 %}
-
-                                        <details class="aviso__detalhes">
-
-                                            <summary>
-                                                Detalhes técnicos
-                                            </summary>
-
-                                            <pre>{{ linhas[1:] | join('\n') | trim }}</pre>
-
-                                        </details>
-
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-
-                        {% endfor %}
-
-                    </div>
-
-                {% endif %}
-
-            {% endwith %}
-
-
-            <!-- Conteúdo específico de cada página -->
-            {% block content %}{% endblock %}
-
+          {% endfor %}
         </div>
 
-    </main>
+        {% endif %} {% endwith %}
 
+        <!-- Conteúdo específico de cada página -->
+        {% block content %}{% endblock %}
+      </div>
+    </main>
 
     <!-- ==========================================
          RODAPÉ
     =========================================== -->
 
     <footer class="rodape">
-
-        <p>
-            Sistema de Eventos e Inscrições.
-            Projeto acadêmico de Programação em Banco de Dados.
-            Os valores são fictícios.
-        </p>
-
+      <p>
+        Sistema de Eventos e Inscrições. Projeto acadêmico de Programação em
+        Banco de Dados. Os valores são fictícios.
+      </p>
     </footer>
-
 
     <!-- ==========================================
          JAVASCRIPT
     =========================================== -->
 
     {% block scripts %}{% endblock %}
-
-</body>
-
+    <script src="{{ url_for('static', filename='js/main.js') }}"
+    defer
+></script>
+  </body>
 </html>

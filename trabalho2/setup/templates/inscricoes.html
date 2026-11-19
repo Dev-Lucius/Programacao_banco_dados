@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+
+{% block title %}Inscrições | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inscricoes.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="pagina">
+
+    <div class="pagina__cabecalho">
+        <div>
+            <h1>Inscrições</h1>
+            <p>Gerencie as inscrições dos participantes nos eventos.</p>
+        </div>
+
+        <a href="{{ url_for('inscricoes.nova_inscricao') }}" class="botao">
+            Nova inscrição
+        </a>
+    </div>
+
+    {% if inscricoes %}
+
+        <div class="tabela-container inscricoes-tabela-container">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Participante</th>
+                        <th>E-mail</th>
+                        <th>Evento</th>
+                        <th>Data da inscrição</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for inscricao in inscricoes %}
+                        <tr>
+                            <td>#{{ inscricao.id }}</td>
+
+                            <td>{{ inscricao.participante }}</td>
+
+                            <td>{{ inscricao.email }}</td>
+
+                            <td>{{ inscricao.evento }}</td>
+
+                            <td>
+                                {{ inscricao.data_inscricao.strftime('%d/%m/%Y %H:%M') }}
+                            </td>
+
+                            <td>
+                                {{ inscricao.valor_pago | brl }}
+                            </td>
+
+                            <td>
+                                <span class="status status--{{ inscricao.status }}">
+                                    {{ inscricao.status.replace('_', ' ') }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if inscricao.status != 'cancelada' %}
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('inscricoes.cancelar_inscricao', inscricao_id=inscricao.id) }}"
+                                        onsubmit="return confirm('Deseja realmente cancelar esta inscrição?');"
+                                    >
+                                        <button type="submit" class="botao botao--perigo">
+                                            Cancelar
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="acao-indisponivel">Indisponível</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+
+        <div class="estado-vazio">
+            <h2>Nenhuma inscrição encontrada</h2>
+            <p>Ainda não existem inscrições cadastradas no sistema.</p>
+
+            <a href="{{ url_for('inscricoes.nova_inscricao') }}" class="botao">
+                Realizar primeira inscrição
+            </a>
+        </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}

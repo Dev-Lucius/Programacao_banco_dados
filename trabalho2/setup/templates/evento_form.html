@@ -1,0 +1,154 @@
+
+{% extends "base.html" %}
+
+{% block title %}Novo Evento | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/eventos.css') }}"
+    >
+{% endblock %}
+
+{% block content %}
+
+<section class="pagina">
+
+    <div class="pagina__cabecalho">
+        <div>
+            <h1>Novo evento</h1>
+            <p>Preencha os dados para cadastrar um novo evento.</p>
+        </div>
+
+        <a href="{{ url_for('eventos.listar_eventos') }}" class="botao botao--secundario">
+            Voltar
+        </a>
+    </div>
+
+    <div class="evento-formulario">
+
+        <form
+            method="POST"
+            action="{{ url_for('eventos.cadastrar_evento') }}"
+        >
+
+            <div class="evento-formulario__grade">
+
+                <div class="campo campo--completo">
+                    <label for="titulo">Título do evento</label>
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        placeholder="Ex.: Workshop de Desenvolvimento Web"
+                        maxlength="200"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="categoria_id">Categoria</label>
+                    <select
+                        id="categoria_id"
+                        name="categoria_id"
+                        required
+                    >
+                        <option value="">Selecione uma categoria</option>
+
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">
+                                {{ categoria.nome }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="local_id">Local</label>
+                    <select
+                        id="local_id"
+                        name="local_id"
+                        required
+                    >
+                        <option value="">Selecione um local</option>
+
+                        {% for local in locais %}
+                            <option value="{{ local.id }}">
+                                {{ local.nome }} — {{ local.capacidade }} pessoas
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="data_inicio">Data de início</label>
+                    <input
+                        type="datetime-local"
+                        id="data_inicio"
+                        name="data_inicio"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="data_fim">Data de encerramento</label>
+                    <input
+                        type="datetime-local"
+                        id="data_fim"
+                        name="data_fim"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="vagas">Quantidade de vagas</label>
+                    <input
+                        type="number"
+                        id="vagas"
+                        name="vagas"
+                        min="1"
+                        step="1"
+                        placeholder="Ex.: 50"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="valor_base">Valor base (R$)</label>
+                    <input
+                        type="number"
+                        id="valor_base"
+                        name="valor_base"
+                        min="0"
+                        step="0.01"
+                        placeholder="Ex.: 100.00"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="evento-formulario__acoes">
+                <a
+                    href="{{ url_for('eventos.listar_eventos') }}"
+                    class="botao botao--secundario"
+                >
+                    Cancelar
+                </a>
+
+                <button type="submit" class="botao">
+                    Cadastrar evento
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

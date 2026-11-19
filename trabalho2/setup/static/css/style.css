@@ -3,24 +3,31 @@
 ================================================== */
 
 :root {
+    /* CORES PRINCIPAIS */
+    --cor-principal: #243B53;
+    --cor-secundaria: #3E5C76;
+    --cor-destaque: #6B8EAD;
+    --cor-destaque-claro: #A9C5DF;
 
-    --cor-principal: #10261a;
-    --cor-secundaria: #245c42;
-    --cor-destaque: #387653;
+    /* FUNDOS E SUPERFÍCIES */
+    --cor-fundo: #172330;
+    --cor-superficie: #202F3E;
+    --cor-superficie-secundaria: #2B3D4F;
+    --cor-borda: #3A4D60;
 
-    --cor-fundo: #f5f7f5;
-    --cor-superficie: #ffffff;
-    --cor-borda: #dce5dd;
+    /* TEXTOS */
+    --cor-texto: #E6EDF4;
+    --cor-texto-secundario: #A8B8C8;
 
-    --cor-texto: #1c2b22;
-    --cor-texto-secundario: #657269;
+    /* ESTADOS */
+    --cor-sucesso: #65B891;
+    --cor-erro: #E47777;
+    --cor-alerta: #E5B96B;
 
-    --cor-sucesso: #237847;
-    --cor-erro: #bd4141;
-    --cor-alerta: #b7791f;
+    /* EFEITOS */
+    --sombra-suave: 0 4px 16px rgba(0, 0, 0, 0.20);
 
-    --sombra-suave: 0 4px 16px rgba(16, 38, 26, 0.06);
-
+    /* DIMENSÕES */
     --raio: 12px;
     --raio-pequeno: 8px;
 
@@ -368,29 +375,23 @@ a {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
     gap: 12px;
-
     margin-top: 10px;
 }
 
 .botao {
     min-height: 44px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    padding: 10px 20px;
-
-    border: 1px solid transparent;
+    margin-top: px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    border: 1px solid #000;
     border-radius: var(--raio-pequeno);
-
     cursor: pointer;
-
     font-size: 14px;
     font-weight: 650;
-
     transition:
         background 0.2s ease,
         transform 0.2s ease,
@@ -412,9 +413,8 @@ a {
 }
 
 .botao--secundario {
-    background: white;
-    color: var(--cor-texto);
-
+    background: var(--cor-secundaria);
+    color: white;
     border-color: var(--cor-borda);
 }
 
@@ -504,7 +504,7 @@ a {
 .rodape {
     padding: 24px 20px;
 
-    background: white;
+    background: rgb(47, 61, 114);
     border-top: 1px solid var(--cor-borda);
 
     text-align: center;

@@ -1,15 +1,220 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Início | Sistema de Eventos{%
+endblock %} {% block head %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/dashboard.css') }}"
+/>
+{% endblock %} {% block content %}
 
-{% block title %}
-    Página inicial
-{% endblock %}
+<section class="dashboard">
+  <!-- Apresentação -->
+  <div class="dashboard-cabecalho">
+    <div>
+      <span class="dashboard-etiqueta">PAINEL ADMINISTRATIVO</span>
 
-{% block content %}
+      <h1>Bem-vindo ao Sistema de Eventos!</h1>
 
-    <h1>Sistema de Eventos e Inscrições</h1>
+      <p>Gerencie eventos, participantes e inscrições em um único lugar.</p>
+    </div>
 
-    <p>
-        Bem-vindo ao sistema!
-    </p>
+    <a href="{{ url_for('eventos.novo_evento') }}" class="botao">
+      <span>+</span>
+      Novo evento
+    </a>
+  </div>
+
+  <!-- Indicadores -->
+  <section class="dashboard-secao">
+    <div class="dashboard-secao__cabecalho">
+      <div>
+        <h2>Visão geral</h2>
+        <p>Acompanhe os principais dados do sistema.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-indicadores">
+      <div class="indicador-card">
+        <div class="indicador-card__icone indicador-card__icone--azul">
+          <i class="fa-regular fa-calendar"></i>
+        </div>
+
+        <div>
+          <span>Eventos cadastrados</span>
+          <strong>{{ total_eventos | default(0) }}</strong>
+        </div>
+      </div>
+
+      <div class="indicador-card">
+        <div class="indicador-card__icone indicador-card__icone--roxo">
+          <i class="fa-solid fa-users"></i>
+        </div>
+
+        <div>
+          <span>Participantes</span>
+          <strong>{{ total_participantes | default(0) }}</strong>
+        </div>
+      </div>
+
+      <div class="indicador-card">
+        <div class="indicador-card__icone indicador-card__icone--verde">
+          <i class="fa-solid fa-ticket"></i>
+        </div>
+
+        <div>
+          <span>Inscrições confirmadas</span>
+          <strong>{{ inscricoes_confirmadas | default(0) }}</strong>
+        </div>
+      </div>
+
+      <div class="indicador-card">
+        <div class="indicador-card__icone indicador-card__icone--amarelo">
+          <i class="fa-regular fa-clock"></i>
+        </div>
+
+        <div>
+          <span>Lista de espera</span>
+          <strong>{{ lista_espera | default(0) }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Próximos eventos -->
+  <section class="dashboard-secao">
+    <div class="dashboard-secao__cabecalho">
+      <div>
+        <h2>Próximos eventos</h2>
+        <p>Confira os eventos programados.</p>
+      </div>
+
+      <a href="{{ url_for('eventos.listar_eventos') }}" class="dashboard-link">
+        Ver todos
+      </a>
+    </div>
+
+    {% if proximos_eventos %}
+
+    <div class="dashboard-eventos">
+      {% for evento in proximos_eventos %}
+
+      <div class="dashboard-evento">
+        <div class="dashboard-evento__data">
+          <i class="fa-regular fa-calendar"></i>
+          <span> {{ evento.data_inicio.strftime('%d/%m/%Y') }} </span>
+        </div>
+
+        <div class="dashboard-evento__info">
+          <strong>{{ evento.titulo }}</strong>
+
+          <span>
+            {{ evento.local }} · {{ evento.data_inicio.strftime('%H:%M') }}
+          </span>
+        </div>
+
+        <span class="status status--{{ evento.status }}">
+          {{ evento.status }}
+        </span>
+      </div>
+
+      {% endfor %}
+    </div>
+
+    {% else %}
+
+    <div class="dashboard-vazio">
+      <i class="fa-regular fa-calendar-xmark"></i>
+
+      <h3>Nenhum evento encontrado</h3>
+
+      <p>Cadastre um novo evento para começar a organizar suas atividades.</p>
+
+      <a href="{{ url_for('eventos.novo_evento') }}" class="botao">
+        Cadastrar evento
+      </a>
+    </div>
+
+    {% endif %}
+  </section>
+
+  <!-- Acesso rápido -->
+  <section class="dashboard-secao">
+    <div class="dashboard-secao__cabecalho">
+      <div>
+        <h2>Acesso rápido</h2>
+        <p>Acesse diretamente as funcionalidades do sistema.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-atalhos">
+      <!-- Novo evento -->
+      <a
+        href="{{ url_for('eventos.novo_evento') }}"
+        class="atalho-card atalho-card--evento"
+      >
+        <div class="atalho-card__icone">
+          <i class="fa-solid fa-calendar-plus"></i>
+        </div>
+
+        <div class="atalho-card__info">
+          <strong>Novo evento</strong>
+          <span>Cadastre um evento.</span>
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square atalho-card__seta"></i>
+      </a>
+
+      <!-- Novo participante -->
+      <a
+        href="{{ url_for('participantes.novo_participante') }}"
+        class="atalho-card atalho-card--participante"
+      >
+        <div class="atalho-card__icone">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+
+        <div class="atalho-card__info">
+          <strong>Novo participante</strong>
+          <span>Cadastre um participante.</span>
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square atalho-card__seta"></i>
+      </a>
+
+      <!-- Nova inscrição -->
+      <a
+        href="{{ url_for('inscricoes.nova_inscricao') }}"
+        class="atalho-card atalho-card--inscricao"
+      >
+        <div class="atalho-card__icone">
+          <i class="fa-solid fa-ticket"></i>
+        </div>
+
+        <div class="atalho-card__info">
+          <strong>Nova inscrição</strong>
+          <span>Realize uma inscrição.</span>
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square atalho-card__seta"></i>
+      </a>
+
+      <!-- Auditoria -->
+      <a
+        href="{{ url_for('auditoria.listar_auditoria') }}"
+        class="atalho-card atalho-card--auditoria"
+      >
+        <div class="atalho-card__icone">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+
+        <div class="atalho-card__info">
+          <strong>Auditoria</strong>
+          <span>Consulte o histórico.</span>
+        </div>
+
+        <i class="fa-solid fa-arrow-up-right-from-square atalho-card__seta"></i>
+      </a>
+    </div>
+  </section>
+</section>
 
 {% endblock %}

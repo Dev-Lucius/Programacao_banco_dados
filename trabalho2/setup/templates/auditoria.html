@@ -1,0 +1,91 @@
+
+{% extends "base.html" %}
+
+{% block title %}Auditoria | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auditoria.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<section class="pagina">
+
+    <div class="pagina__cabecalho">
+        <div>
+            <h1>Histórico de auditoria</h1>
+            <p>Consulte as alterações realizadas nas inscrições.</p>
+        </div>
+    </div>
+
+
+    {% if registros %}
+
+        <div class="auditoria-tabela-container">
+
+            <table class="auditoria-tabela">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Participante</th>
+                        <th>Evento</th>
+                        <th>Status anterior</th>
+                        <th>Status novo</th>
+                        <th>Data e horário</th>
+                        <th>Usuário</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for registro in registros %}
+                    <tr>
+                        <td>#{{ registro.id }}</td>
+
+                        <td>{{ registro.participante }}</td>
+
+                        <td>{{ registro.evento }}</td>
+
+                        <td>
+                            {% if registro.status_anterior %}
+                                <span class="auditoria-status status--{{ registro.status_anterior }}">
+                                    {{ registro.status_anterior | replace('_', ' ') }}
+                                </span>
+                            {% else %}
+                                <span class="auditoria-sem-status">—</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="auditoria-status status--{{ registro.status_novo }}">
+                                {{ registro.status_novo | replace('_', ' ') }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ registro.data_hora.strftime('%d/%m/%Y %H:%M') }}
+                        </td>
+
+                        <td>{{ registro.usuario or 'Não informado' }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="auditoria-vazio">
+            <h2>Nenhum registro encontrado</h2>
+            <p>As alterações realizadas nas inscrições aparecerão aqui.</p>
+        </div>
+
+    {% endif %}
+
+</section>
+{% endblock %}

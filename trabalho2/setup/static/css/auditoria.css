@@ -1,0 +1,169 @@
+
+/* ========================================
+   TABELA DE AUDITORIA
+======================================== */
+
+.auditoria-tabela-container {
+    width: 100%;
+    margin: 2rem auto;
+    overflow-x: auto;
+
+    border: 2px solid var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+}
+
+.auditoria-tabela {
+    width: 95%;
+    min-width: 1100px;
+    margin: 0 auto;
+
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Cabeçalho */
+
+.auditoria-tabela thead {
+    background: var(--cor-superficie-secundaria);
+}
+
+.auditoria-tabela th {
+    padding: 1rem 1.2rem;
+
+    color: var(--cor-texto-secundario);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Células */
+
+.auditoria-tabela td {
+    padding: 1.1rem 1.2rem;
+
+    color: var(--cor-texto);
+    font-size: 0.875rem;
+    white-space: nowrap;
+
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Linhas */
+
+.auditoria-tabela tbody tr {
+    transition: background 0.2s ease;
+}
+
+.auditoria-tabela tbody tr:hover {
+    background: var(--cor-superficie-secundaria);
+}
+
+.auditoria-tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.auditoria-tabela td:first-child {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ========================================
+   STATUS DA INSCRIÇÃO
+======================================== */
+
+.auditoria-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.35rem 0.7rem;
+    border-radius: 20px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Inscrição confirmada */
+
+.auditoria-status.status--confirmada {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.12);
+}
+
+/* Lista de espera */
+
+.auditoria-status.status--lista_espera {
+    color: #facc15;
+    background: rgba(250, 204, 21, 0.12);
+}
+
+/* Inscrição cancelada */
+
+.auditoria-status.status--cancelada {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+}
+
+/* Ausência de status anterior */
+
+.auditoria-sem-status {
+    color: var(--cor-texto-secundario);
+}
+
+
+/* ========================================
+   ESTADO VAZIO
+======================================== */
+
+.auditoria-vazio {
+    margin-top: 2rem;
+    padding: 3rem 1.5rem;
+
+    text-align: center;
+
+    border: 1px dashed var(--cor-borda);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+}
+
+.auditoria-vazio h2 {
+    margin-bottom: 0.5rem;
+}
+
+.auditoria-vazio p {
+    margin-bottom: 0;
+    color: var(--cor-texto-secundario);
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 768px) {
+
+    .auditoria-tabela-container {
+        margin-top: 1.5rem;
+    }
+
+    .auditoria-tabela {
+        width: 100%;
+    }
+
+    .auditoria-tabela th,
+    .auditoria-tabela td {
+        padding: 0.9rem;
+    }
+
+    .auditoria-vazio {
+        padding: 2rem 1rem;
+    }
+
+}

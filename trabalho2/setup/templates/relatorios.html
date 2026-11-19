@@ -1,0 +1,218 @@
+
+{% extends "base.html" %}
+
+{% block title %}Relatórios | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/relatorio.css') }}"
+    >
+{% endblock %}
+
+{% block content %}
+
+<section class="pagina relatorios">
+    
+    <!-- Cabeçalho -->
+    <div class="pagina__cabecalho">
+        <div>
+            <span class="relatorios-etiqueta">ANÁLISE DO SISTEMA</span>
+            <h1>Relatórios</h1>
+            <p>
+                Acompanhe a ocupação, as inscrições e a arrecadação
+                dos eventos cadastrados.
+            </p>
+        </div>
+    </div>
+
+    <!-- Indicadores gerais -->
+    <section class="relatorios-secao">
+
+        <div class="relatorios-indicadores">
+
+            <article class="relatorio-card">
+                <div class="relatorio-card__icone icone--azul">
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+
+                <div>
+                    <span>Eventos analisados</span>
+                    <strong>{{ relatorio.resumo.total_eventos }}</strong>
+                </div>
+            </article>
+
+
+            <article class="relatorio-card">
+                <div class="relatorio-card__icone icone--verde">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+                    <span>Inscrições confirmadas</span>
+                    <strong>{{ relatorio.resumo.total_confirmados }}</strong>
+                </div>
+            </article>
+
+
+            <article class="relatorio-card">
+                <div class="relatorio-card__icone icone--amarelo">
+                    <i class="fa-regular fa-clock"></i>
+                </div>
+
+                <div>
+                    <span>Lista de espera</span>
+                    <strong>{{ relatorio.resumo.total_lista_espera }}</strong>
+                </div>
+            </article>
+
+
+            <article class="relatorio-card">
+                <div class="relatorio-card__icone icone--roxo">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+
+                <div>
+                    <span>Arrecadação total</span>
+                    <strong>{{ relatorio.resumo.arrecadacao_total | brl }}</strong>
+                </div>
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- Ocupação geral -->
+<section class="relatorios-secao">
+
+    {% set percentual = relatorio.resumo.percentual_ocupacao | float %}
+    {% set percentual = [percentual, 100] | min %}
+    {% set percentual = [percentual, 0] | max %}
+
+    <div class="relatorios-secao__cabecalho">
+        <div>
+            <h2>Ocupação geral</h2>
+            <p>Proporção de vagas ocupadas nos eventos.</p>
+        </div>
+
+        <strong class="relatorios-percentual">
+            {{ percentual }}%
+        </strong>
+    </div>
+
+    <div class="relatorios-progresso">
+        <div
+            class="relatorios-progresso__valor"
+            style="--ocupacao: {{ percentual }}%;"
+        ></div>
+    </div>
+
+    <div class="relatorios-progresso__legenda">
+        <span>
+            {{ relatorio.resumo.total_confirmados }} vagas ocupadas
+        </span>
+
+        <span>
+            {{ relatorio.resumo.total_vagas }} vagas disponíveis no total
+        </span>
+    </div>
+
+</section>
+
+
+    <!-- Tabela de ocupação -->
+    <section class="relatorios-secao">
+
+        <div class="relatorios-secao__cabecalho">
+            <div>
+                <h2>Ocupação por evento</h2>
+                <p>Detalhamento dos resultados de cada evento.</p>
+            </div>
+        </div>
+
+
+        {% if relatorio.eventos %}
+
+            <div class="tabela-container">
+
+                <table class="tabela">
+
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Vagas</th>
+                            <th>Confirmados</th>
+                            <th>Lista de espera</th>
+                            <th>Ocupação</th>
+                            <th>Arrecadação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for evento in relatorio.eventos %}
+
+                            <tr>
+
+                                <td class="relatorio-evento__titulo">
+                                    {{ evento.titulo }}
+                                </td>
+
+                                <td>{{ evento.vagas }}</td>
+
+                                <td>{{ evento.confirmados }}</td>
+
+                                <td>{{ evento.lista_espera }}</td>
+
+                                <td>
+                                    <div class="ocupacao-celula">
+
+                                        <span>
+                                            {{ evento.percentual_ocupacao }}%
+                                        </span>
+
+                                        <div class="ocupacao-barra">
+                                            <div
+                                                class="ocupacao-barra__valor"
+                                                style="--ocupacao: {{ evento.percentual_ocupacao | float }}%;"
+                                            ></div>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{ evento.arrecadacao | brl }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="estado-vazio">
+                <i class="fa-solid fa-chart-column"></i>
+                <h2>Nenhum dado disponível</h2>
+                <p>
+                    Cadastre eventos e realize inscrições para
+                    visualizar os relatórios.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</section>
+
+{% endblock %}

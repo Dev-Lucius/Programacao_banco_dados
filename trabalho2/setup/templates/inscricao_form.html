@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+
+{% block title %}Nova Inscrição | Sistema de Eventos{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inscricoes.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="pagina">
+
+    <div class="pagina__cabecalho">
+        <div>
+            <h1>Nova inscrição</h1>
+            <p>Selecione o participante e o evento desejado.</p>
+        </div>
+
+        <a href="{{ url_for('inscricoes.listar_inscricoes') }}" class="botao botao--secundario">
+            Voltar
+        </a>
+    </div>
+
+    <div class="inscricao-formulario">
+
+        <form method="POST" action="{{ url_for('inscricoes.criar_inscricao') }}">
+
+            <div class="campo">
+                <label for="participante_id">Participante</label>
+
+                <select id="participante_id" name="participante_id" required>
+                    <option value="">Selecione um participante</option>
+
+                    {% for participante in participantes %}
+                        <option value="{{ participante.id }}">
+                            {{ participante.nome }} — {{ participante.email }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="evento_id">Evento</label>
+
+                <select id="evento_id" name="evento_id" required>
+                    <option value="">Selecione um evento</option>
+
+                    {% for evento in eventos %}
+                        <option value="{{ evento.id }}">
+                            {{ evento.titulo }} — {{ evento.valor_base | brl }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="inscricao-formulario__aviso">
+                <p>
+                    O valor final e a disponibilidade de vagas serão
+                    calculados automaticamente pelo sistema.
+                </p>
+            </div>
+
+            <div class="inscricao-formulario__acoes">
+                <a href="{{ url_for('inscricoes.listar_inscricoes') }}" class="botao botao--secundario">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="botao">
+                    Realizar inscrição
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+{% endblock %}
