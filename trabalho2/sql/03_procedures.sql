@@ -46,7 +46,7 @@ BEGIN
 
     -- Definindo o Status da Inscrição
     IF var_confirmadas < var_vagas THEN
-        var_status := 'confirmadas';
+        var_status := 'confirmada';
     ELSE 
         var_status := 'lista_espera';
     END IF;
@@ -64,7 +64,7 @@ CREATE OR REPLACE PROCEDURE sp_cancelar_inscricao(p_inscricao INTEGER)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    var_evento INTEGER,
+    var_evento INTEGER;
     var_status_atual status_inscricao;
     var_prox_inscricao INTEGER;
 BEGIN
