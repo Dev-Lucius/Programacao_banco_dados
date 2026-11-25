@@ -97,7 +97,7 @@ BEGIN
         END IF;
     END IF;
     -- 3; Finalizar a Função
-    RETURN NULL    
+    RETURN NULL;    
 END;
 $$;
 
@@ -209,4 +209,3 @@ BEGIN
     ORDER BY e.id;
 END;
 $$;
-
