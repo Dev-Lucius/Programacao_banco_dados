@@ -158,3 +158,4 @@ def cancelar_inscricao(inscricao_id):
 
     finally:
         db.close()
+

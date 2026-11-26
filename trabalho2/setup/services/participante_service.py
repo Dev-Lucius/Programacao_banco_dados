@@ -66,3 +66,4 @@ def cadastrar_participante(nome, email, tipo):
     finally:
         if db is not None:
             db.close()
+

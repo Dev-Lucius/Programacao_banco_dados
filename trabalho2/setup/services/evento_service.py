@@ -117,3 +117,4 @@ def cadastrar_evento(
 
     finally:
         db.close()
+

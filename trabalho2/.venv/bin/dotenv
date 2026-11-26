@@ -1,4 +1,4 @@
-#!/home/lucius/Estudos/prog_banco_dados/trabalho2/.venv/bin/python3
+#!/home/lucius/Estudos/Programacao_banco_dados/trabalho2/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

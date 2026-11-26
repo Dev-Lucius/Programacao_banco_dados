@@ -80,3 +80,4 @@ def cadastrar_evento():
     return redirect(
         url_for("eventos.listar_eventos")
     )
+

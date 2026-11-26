@@ -1,5 +1,7 @@
+\encoding UTF8
 CREATE DATABASE sistemas_eventos_inscricoes;
 \c sistemas_eventos_inscricoes
+\encoding UTF8
 
 -- Tipos enumerados
 CREATE TYPE status_evento     AS ENUM ('aberto', 'encerrado', 'cancelado');
@@ -66,4 +68,5 @@ CREATE TABLE log_inscricao (
 );
 
 CREATE INDEX idx_log_inscricao ON log_inscricao (inscricao_id);
+
 

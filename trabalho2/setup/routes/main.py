@@ -19,3 +19,4 @@ def index():
         lista_espera=indicadores["lista_espera"],
         proximos_eventos=proximos_eventos
     )
+

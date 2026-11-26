@@ -58,3 +58,4 @@ def cadastrar_participante():
     return redirect(
         url_for("participantes.novo_participante")
     )
+

@@ -79,3 +79,4 @@ def cancelar_inscricao(inscricao_id):
         flash("Não foi possível cancelar a inscrição.", "erro")
 
     return redirect(url_for("inscricoes.listar_inscricoes"))
+

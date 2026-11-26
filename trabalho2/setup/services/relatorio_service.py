@@ -75,3 +75,4 @@ def obter_relatorio_ocupacao():
             "arrecadacao_total": arrecadacao_total
         }
     }
+

@@ -55,3 +55,4 @@ def listar_proximos_eventos():
         """)
     finally:
         db.close()
+

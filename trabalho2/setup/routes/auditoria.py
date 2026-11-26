@@ -17,3 +17,4 @@ def listar_auditoria():
         "auditoria.html",
         registros=registros
     )
+

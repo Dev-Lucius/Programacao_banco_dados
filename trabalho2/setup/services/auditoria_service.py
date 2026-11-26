@@ -30,3 +30,4 @@ def listar_auditoria():
 
     finally:
         db.close()
+

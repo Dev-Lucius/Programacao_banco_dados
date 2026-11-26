@@ -438,16 +438,15 @@ a {
 
 .aviso {
     padding: 15px 18px;
-
     border-radius: var(--raio-pequeno);
     border: 1px solid transparent;
-
     background: white;
 }
 
 .aviso__titulo {
     font-size: 14px;
     font-weight: 600;
+    color: #000;
 }
 
 .aviso--success {

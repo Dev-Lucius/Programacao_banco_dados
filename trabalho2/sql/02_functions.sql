@@ -1,3 +1,4 @@
+\encoding UTF8
 -- 1. fn_valida_inscricao	
 -- Regra: impede inscrição em evento cancelado ou encerrado e em evento cujo horário conflite com outro já confirmado do mesmo participante.
 -- Mecanismo: RAISE EXCEPTION com mensagem clara.
@@ -10,45 +11,86 @@ DECLARE
     v_status_evento status_evento;
     v_data_inicio TIMESTAMP;
     v_data_fim TIMESTAMP;
-
+    v_vagas INTEGER;
+    v_capacidade_local INTEGER;
 BEGIN
-    -- 1. Recuperando os dados do evento
+    -- 1. Permitir o cancelamento da inscrição
+    IF NEW.status = 'cancelada' THEN
+        RETURN NEW;
+    END IF;
+
+    -- 2. Recuperar e bloquear os dados do evento
     SELECT
         e.status,
         e.data_inicio,
-        e.data_fim
+        e.data_fim,
+        e.vagas,
+        l.capacidade
     INTO
         v_status_evento,
         v_data_inicio,
-        v_data_fim
+        v_data_fim,
+        v_vagas,
+        v_capacidade_local
     FROM evento e
-    WHERE e.id = NEW.evento_id;
+    INNER JOIN local l
+        ON l.id = e.local_id
+    WHERE e.id = NEW.evento_id
+    FOR UPDATE OF e;
 
-    -- Verificando se o evento existe
+    -- 3. Verificar se o evento existe
     IF NOT FOUND THEN
         RAISE EXCEPTION
             'Evento % não encontrado.',
             NEW.evento_id;
     END IF;
 
-    -- 2. Validando o status do evento
-    IF v_status_evento IN ('encerrado', 'cancelado') THEN
+    -- 4. Validar o status do evento
+    IF v_status_evento <> 'aberto' THEN
         RAISE EXCEPTION
-            'Não é possível realizar inscrição em eventos encerrados ou cancelados.';
+            'Não é possível realizar inscrição no evento %, pois ele está %.',
+            NEW.evento_id,
+            v_status_evento;
     END IF;
 
-    -- 3. Verificando conflitos de horário
-    IF EXISTS (
+    -- 5. Validar a capacidade do local
+    IF v_capacidade_local IS NULL THEN
+        RAISE EXCEPTION
+            'O evento % está associado a um local inexistente ou sem capacidade definida.',
+            NEW.evento_id;
+    END IF;
+
+    IF v_vagas > v_capacidade_local THEN
+        RAISE EXCEPTION
+            'O evento possui % vagas, mas o local comporta apenas % pessoas.',
+            v_vagas,
+            v_capacidade_local;
+    END IF;
+
+    -- 6. Bloquear o participante durante a validação
+    PERFORM 1
+    FROM participante p
+    WHERE p.id = NEW.participante_id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION
+            'Participante % não encontrado.',
+            NEW.participante_id;
+    END IF;
+
+    -- 7. Verificar conflitos de horário
+    IF NEW.status = 'confirmada' AND EXISTS (
         SELECT 1
         FROM inscricao i
         INNER JOIN evento e
             ON e.id = i.evento_id
-        WHERE
-            i.participante_id = NEW.participante_id
-            AND i.status = 'confirmada'
-            AND e.id <> NEW.evento_id
-            AND e.data_inicio < v_data_fim
-            AND e.data_fim > v_data_inicio
+        WHERE i.participante_id = NEW.participante_id
+          AND i.id IS DISTINCT FROM NEW.id
+          AND i.status = 'confirmada'
+          AND e.id <> NEW.evento_id
+          AND e.data_inicio < v_data_fim
+          AND e.data_fim > v_data_inicio
     ) THEN
         RAISE EXCEPTION
             'Participante % já possui inscrição confirmada em evento com horário conflitante.',
@@ -58,6 +100,7 @@ BEGIN
     RETURN NEW;
 END;
 $$;
+
 
 -- 2. fn_auditoria_inscricao
 -- Regra: toda criação ou mudança de status em inscricao gera uma linha em log_inscricao.
@@ -163,8 +206,6 @@ BEGIN
 END;
 $$;
 
-SELECT * FROM fn_calcular_valor_inscricao(1, 4);
--- 75 * (1 - 0) = 75
 
 
 -- 3. fn_relatorio_ocupacao()
@@ -209,3 +250,4 @@ BEGIN
     ORDER BY e.id;
 END;
 $$;
+
